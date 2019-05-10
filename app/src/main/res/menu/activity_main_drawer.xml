@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_event"
+            android:icon="@drawable/ic_menu_event"
+            android:title="Events" />
+        <item
+            android:id="@+id/nav_gallery"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Gallery" />
+        <item
+            android:id="@+id/nav_participants"
+            android:icon="@drawable/ic_menu_participants"
+            android:title="Participants" />
+        <item
+            android:id="@+id/nav_winners"
+            android:icon="@drawable/ic_menu_winner"
+            android:title="Winners" />
+    </group>
+
+    <item android:title="Celebrate">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Share" />
+            <item
+                android:id="@+id/nav_broadcast"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Broadcast" />
+        </menu>
+    </item>
+
+</menu>

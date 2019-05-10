@@ -1,0 +1,16 @@
+# Gradle files
+.gradle/ 
+build/
+local.properties 
+app/build/ 
+
+# Idea files
+.idea/libraries/ 
+.idea/gradle.xml 
+.idea/workspace.xml 
+.idea/caches/
+
+# Application and Java class files
+*.class
+*.apk
+*.ap_
