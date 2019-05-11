@@ -1,5 +1,6 @@
 package ml.oopscpp.interweb;
 
+import android.content.res.TypedArray;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -14,12 +15,20 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private RecyclerView mRecyclerView;
+    private ArrayList<Event> mSportsData;
+    private EventsAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +36,26 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
+        // Initialize the RecyclerView.
+        mRecyclerView = findViewById(R.id.recyclerView);
+
+        // Set the Layout Manager.
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        // Initialize the ArrayList that will contain the data.
+        mSportsData = new ArrayList<>();
+
+        // Initialize the adapter and set it to the RecyclerView.
+        mAdapter = new EventsAdapter(this, mSportsData);
+        mRecyclerView.setAdapter(mAdapter);
+
+        // Get the data.
+        initializeData();
+
+
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -99,8 +128,53 @@ public class MainActivity extends AppCompatActivity
 
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
+
+
+
+
+
+
+
+
+    /**
+     * Initialize the sports data from resources.
+     */
+    private void initializeData() {
+        // Get the resources from the XML file.
+        String[] sportsList = getResources()
+                .getStringArray(R.array.event_titles);
+        String[] sportsInfo = getResources()
+                .getStringArray(R.array.events_info);
+        TypedArray sportsImageResources = getResources()
+                .obtainTypedArray(R.array.sports_images);
+
+        // Clear the existing data (to avoid duplication).
+        mSportsData.clear();
+
+        // Create the ArrayList of Sports objects with the titles and
+        // information about each sport
+        for (int i = 0; i < sportsList.length; i++) {
+            mSportsData.add(new Event(sportsList[i], sportsInfo[i],
+                    sportsImageResources.getResourceId(i, 0)));
+        }
+
+        // Recycle the typed array.
+        sportsImageResources.recycle();
+
+        // Notify the adapter of the change.
+        mAdapter.notifyDataSetChanged();
+    }
+
 }
+
+
+
+
+
+

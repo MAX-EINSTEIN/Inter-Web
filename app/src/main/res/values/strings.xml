@@ -6,4 +6,35 @@
     <string name="nav_header_subtitle">anonymous@school.edu</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+    <string name="title_placeholder">Event Name</string>
+    <string name="host_placeholder">Event Host</string>
+    <string name="date_placeholder">20 April, 2019</string>
+
+
+    <string-array name="event_titles">
+        <item>Baseball</item>
+        <item>Badminton</item>
+        <item>Basketball</item>
+        <item>Bowling</item>
+        <item>Cycling</item>
+    </string-array>
+
+    <string-array name="events_info">
+        <item>Here is some Baseball news!</item>
+        <item>Here is some Badminton news!</item>
+        <item>Here is some Basketball news!</item>
+        <item>Here is some Bowling news!</item>
+        <item>Here is some Cycling news!</item>
+    </string-array>
+
+
+    <array name="sports_images">
+        <item>@drawable/ic_menu_winner</item>
+        <item>@drawable/ic_menu_gallery</item>
+        <item>@drawable/ic_menu_participants</item>
+        <item>@drawable/ic_menu_event</item>
+        <item>@drawable/ic_menu_camera</item>
+    </array>
+
+
 </resources>
