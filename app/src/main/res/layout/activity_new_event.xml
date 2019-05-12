@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".NewEvent" >
+
+    <ImageView
+        android:id="@+id/newEventImage"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_menu_camera"/>
+
+    <TextView
+        android:id="@+id/newEventTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/newEventImage"
+        android:textSize="40sp"
+        android:text="Race of the Champions"
+        android:textColor="@android:color/black"/>
+
+    <TextView
+        android:id="@+id/newEventDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/newEventTitle"
+        android:layout_marginTop="8dp"
+        android:text="20 May, 2019"/>
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_below="@id/newEventDate">
+        <TableRow>
+            <TextView android:text="Participant" android:textSize="30sp"/>
+            <TextView android:text="School" android:textSize="30sp"/>
+        </TableRow>
+    </TableLayout>
+
+</RelativeLayout>
