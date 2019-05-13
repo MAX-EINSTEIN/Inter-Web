@@ -1,43 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".NewEvent" >
+    tools:context=".NewEvent">
 
     <ImageView
         android:id="@+id/newEventImage"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="220dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/ic_menu_camera"/>
+        android:background="@drawable/pick_image_icon"/>
 
-    <TextView
-        android:id="@+id/newEventTitle"
+
+    <TableLayout
+        android:id="@+id/eventBriefDetails"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/newEventImage"
-        android:textSize="40sp"
-        android:text="Race of the Champions"
-        android:textColor="@android:color/black"/>
+        android:padding="16dp"
+        android:stretchColumns="*"
+        android:shrinkColumns="*">
 
-    <TextView
-        android:id="@+id/newEventDate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/newEventTitle"
-        android:layout_marginTop="8dp"
-        android:text="20 May, 2019"/>
+        <!-- first row -->
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:background="@color/colorAccent">
 
-    <TableLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_below="@id/newEventDate">
-        <TableRow>
-            <TextView android:text="Participant" android:textSize="30sp"/>
-            <TextView android:text="School" android:textSize="30sp"/>
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="EVENT NAME"
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+            <EditText
+                android:id="@+id/newEventTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Enter name of the event"
+                android:inputType="textPersonName"/>
+
         </TableRow>
+
+        <!-- second row -->
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:background="#0091EA">
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="EVENT DATE"
+                android:textAllCaps="true"
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+            <EditText
+                android:id="@+id/newEventDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Enter date of the event" />
+
+        </TableRow>
+
+        <!-- third row -->
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:background="@color/colorPrimaryDark">
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="EVENT VENUE"
+                android:textAllCaps="true"
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+            <EditText
+                android:id="@+id/newEventVenue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Enter venue of the event" />
+
+        </TableRow>
+
     </TableLayout>
+
+
+    <Button
+        android:id="@+id/btnSubmit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/eventBriefDetails"
+        android:layout_centerHorizontal="true"
+        android:text="SUBMIT"/>
+
 
 </RelativeLayout>

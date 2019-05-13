@@ -2,6 +2,7 @@ package ml.oopscpp.interweb;
 
 import java.util.ArrayList;
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,10 +32,12 @@ public class EventAdapter extends ArrayAdapter<Event>{
         ImageView image = convertView.findViewById(R.id.eventImage);
         TextView title = convertView.findViewById(R.id.eventTitle);
         TextView date = convertView.findViewById(R.id.eventDate);
+        TextView venue = convertView.findViewById(R.id.eventVenue);
         // Populate the data into the template view using the data object
-        image.setImageResource(event.getEventImage());
+        image.setImageURI(Uri.parse(event.getEventImage()));
         title.setText(event.getEventTitle());
         date.setText(event.getEventDate());
+        venue.setText(event.getEventVenue());
         // Return the completed view to render on screen
         return convertView;
     }
