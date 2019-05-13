@@ -10,6 +10,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
 
 public class NewEvent extends AppCompatActivity {
 
@@ -18,6 +21,11 @@ public class NewEvent extends AppCompatActivity {
     Uri imageUri;
 
     private Button button;
+
+    private ArrayList<String> participants;
+    private ArrayList<String> collaborators;
+
+    private Button addParticipantButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,12 +41,24 @@ public class NewEvent extends AppCompatActivity {
             }
         });
 
-        button = findViewById(R.id.btnSubmit);
+        button = findViewById(R.id.submitEventData);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 submitEventData();
+            }
+        });
+
+        participants = new ArrayList<>();
+        collaborators = new ArrayList<>();
+
+        addParticipantButton =  findViewById(R.id.addParticipantButton);
+
+        addParticipantButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addParticipantsToLists();
             }
         });
     }
@@ -57,11 +77,22 @@ public class NewEvent extends AppCompatActivity {
         }
     }
 
+    private void addParticipantsToLists(){
+        TextView participantName = findViewById(R.id.newParticipantName);
+        TextView instituteName = findViewById(R.id.newInstituteName);
+        participants.add(participantName.getText().toString());
+        collaborators.add(instituteName.getText().toString());
+        String value = "New Participant: " + participantName.getText().toString() + ", Institute: " + participantName.getText().toString() + " added";
+        Toast.makeText(getApplicationContext(), value, Toast.LENGTH_SHORT).show();
+        participantName.setText("");
+        instituteName.setText("");
+    }
+
     private void submitEventData(){
             TextView title = findViewById(R.id.newEventTitle);
             TextView date = findViewById(R.id.newEventDate);
             TextView venue = findViewById(R.id.newEventVenue);
-            Event newEvent = new Event(imageUri,title.getText().toString(),date.getText().toString(),venue.getText().toString());
+            Event newEvent = new Event(imageUri,title.getText().toString(),date.getText().toString(),venue.getText().toString(),participants,collaborators);
             Intent addToList = new Intent(NewEvent.this,MainActivity.class);
             addToList.putExtra("newEvent",newEvent);
             addToList.putExtra("uniqueId","NewEvent");

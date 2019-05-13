@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -14,12 +13,23 @@
         android:background="@drawable/pick_image_icon"/>
 
 
+    <TextView
+        android:id="@+id/addEventDetailsLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/newEventImage"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:text="Event Details"
+        android:textStyle="bold"
+        android:textColor="@color/colorPrimaryDark"/>
+
     <TableLayout
         android:id="@+id/eventBriefDetails"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/newEventImage"
-        android:padding="16dp"
+        android:layout_below="@id/addEventDetailsLabel"
+        android:padding="8dp"
         android:stretchColumns="*"
         android:shrinkColumns="*">
 
@@ -31,7 +41,7 @@
             android:background="@color/colorAccent">
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/titleLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="EVENT NAME"
@@ -55,7 +65,7 @@
             android:background="#0091EA">
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/dateLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="EVENT DATE"
@@ -79,7 +89,7 @@
             android:background="@color/colorPrimaryDark">
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/venueLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="EVENT VENUE"
@@ -94,17 +104,99 @@
                 android:hint="Enter venue of the event" />
 
         </TableRow>
-
     </TableLayout>
 
 
-    <Button
-        android:id="@+id/btnSubmit"
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/addParticipantsLabel"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/eventBriefDetails"
-        android:layout_centerHorizontal="true"
-        android:text="SUBMIT"/>
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:text="Participant Details"
+        android:textStyle="bold"
+        android:textColor="@color/colorPrimaryDark"/>
 
+    <TableLayout
+        android:id="@+id/eventParticipantDetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/addParticipantsLabel"
+        android:padding="8dp"
+        android:stretchColumns="*"
+        android:shrinkColumns="*">
+
+        <!-- first row -->
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:background="@color/colorAccent">
+
+            <TextView
+                android:id="@+id/nameLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PARTICIPANT"
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+            <EditText
+                android:id="@+id/newParticipantName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Participant Name"
+                android:inputType="textPersonName"/>
+
+        </TableRow>
+
+        <!-- second row -->
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:background="#0091EA">
+
+            <TextView
+                android:id="@+id/instituteLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="INSTITUTE"
+                android:textAllCaps="true"
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+            <EditText
+                android:id="@+id/newInstituteName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Institute Name" />
+        </TableRow>
+
+        <!-- second row -->
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:background="@color/colorPrimaryDark">
+
+            <Button
+                android:id="@+id/addParticipantButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add Participant"
+                android:background="@color/colorPrimaryDark" />
+
+            <Button
+                android:id="@+id/submitEventData"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimaryDark"
+                android:text="SUBMIT"/>
+        </TableRow>
+
+
+    </TableLayout>
 
 </RelativeLayout>
