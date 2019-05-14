@@ -9,7 +9,8 @@
         android:id="@+id/detailEventImage"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerCrop"
+        android:contentDescription="@string/event_image_content_description" />
 
     <TextView
         android:id="@+id/detailEventTitle"
@@ -26,18 +27,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/detailEventTitle"
-        android:layout_marginRight="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp" />
+        android:padding="8dp"/>
 
     <TextView
         android:id="@+id/detailEventVenue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/detailEventTitle"
-        android:layout_toEndOf="@id/detailEventDate"
-        android:layout_marginRight="8dp"
-        android:layout_marginLeft="180dp"
+        android:padding="@dimen/small_padding"
+        android:layout_alignParentEnd="true"
         android:layout_marginTop="8dp" />
 
     <TableLayout
@@ -48,9 +46,10 @@
         android:layout_marginTop="16dp"
         android:stretchColumns="*"
         android:shrinkColumns="*">
-        <TableRow android:padding="8dp">
-            <TextView android:text="Participant" android:textSize="25sp" android:textColor="@android:color/white" android:background="@color/colorPrimaryDark"/>
-            <TextView android:text="School" android:textSize="25sp" android:textColor="@android:color/white" android:background="@color/colorPrimaryDark"/>
+        <TableRow android:padding="8dp"
+            tools:ignore="UselessParent">
+            <TextView android:text="@string/participant_placeholder" android:textSize="25sp" android:textColor="@android:color/white" android:background="@color/colorPrimaryDark"/>
+            <TextView android:text="@string/institute_placeholder" android:textSize="25sp" android:textColor="@android:color/white" android:background="@color/colorPrimaryDark"/>
         </TableRow>
     </TableLayout>
 

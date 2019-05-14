@@ -1,26 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".NewEvent">
+    tools:context=".NewEvent"
+    android:orientation="vertical">
 
     <ImageView
         android:id="@+id/newEventImage"
         android:layout_width="match_parent"
         android:layout_height="220dp"
+        android:layout_weight="1"
         android:scaleType="centerCrop"
-        android:background="@drawable/pick_image_icon"/>
+        android:background="@drawable/pick_image_icon"
+        android:contentDescription="@string/event_image_content_description" />
 
 
     <TextView
         android:id="@+id/addEventDetailsLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/newEventImage"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
-        android:text="Event Details"
+        android:text="@string/event_detail_heading"
         android:textStyle="bold"
         android:textColor="@color/colorPrimaryDark"/>
 
@@ -28,12 +30,11 @@
         android:id="@+id/eventBriefDetails"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/addEventDetailsLabel"
+        android:layout_weight="1"
         android:padding="8dp"
         android:stretchColumns="*"
         android:shrinkColumns="*">
 
-        <!-- first row -->
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -44,7 +45,8 @@
                 android:id="@+id/titleLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="EVENT NAME"
+                android:text="@string/title_placeholder"
+                android:textAllCaps="true"
                 android:textAppearance="?android:attr/textAppearanceMedium"/>
 
             <EditText
@@ -52,12 +54,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="Enter name of the event"
-                android:inputType="textPersonName"/>
+                android:hint="@string/title_placeholder"
+                android:inputType="textPersonName"
+                tools:ignore="Autofill" />
 
         </TableRow>
 
-        <!-- second row -->
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -68,7 +70,7 @@
                 android:id="@+id/dateLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="EVENT DATE"
+                android:text="@string/date_placeholder"
                 android:textAllCaps="true"
                 android:textAppearance="?android:attr/textAppearanceMedium"/>
 
@@ -77,11 +79,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="Enter date of the event" />
+                android:hint="@string/date_placeholder"
+                tools:ignore="Autofill,TextFields" />
 
         </TableRow>
 
-        <!-- third row -->
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -92,7 +94,7 @@
                 android:id="@+id/venueLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="EVENT VENUE"
+                android:text="@string/venue_placeholder"
                 android:textAllCaps="true"
                 android:textAppearance="?android:attr/textAppearanceMedium"/>
 
@@ -101,8 +103,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="Enter venue of the event" />
-
+                android:hint="@string/venue_placeholder"
+                tools:ignore="Autofill,TextFields" />
         </TableRow>
     </TableLayout>
 
@@ -111,10 +113,9 @@
         android:id="@+id/addParticipantsLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/eventBriefDetails"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
-        android:text="Participant Details"
+        android:text="@string/participant_detail_heading"
         android:textStyle="bold"
         android:textColor="@color/colorPrimaryDark"/>
 
@@ -122,12 +123,11 @@
         android:id="@+id/eventParticipantDetails"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/addParticipantsLabel"
+        android:layout_weight="1"
         android:padding="8dp"
         android:stretchColumns="*"
         android:shrinkColumns="*">
 
-        <!-- first row -->
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -138,7 +138,8 @@
                 android:id="@+id/nameLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="PARTICIPANT"
+                android:text="@string/participant_placeholder"
+                android:textAllCaps="true"
                 android:textAppearance="?android:attr/textAppearanceMedium"/>
 
             <EditText
@@ -146,12 +147,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="Participant Name"
-                android:inputType="textPersonName"/>
+                android:hint="@string/participant_placeholder"
+                android:inputType="textPersonName"
+                tools:ignore="Autofill" />
 
         </TableRow>
 
-        <!-- second row -->
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -162,7 +163,7 @@
                 android:id="@+id/instituteLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="INSTITUTE"
+                android:text="@string/institute_placeholder"
                 android:textAllCaps="true"
                 android:textAppearance="?android:attr/textAppearanceMedium"/>
 
@@ -171,10 +172,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="Institute Name" />
+                android:hint="@string/institute_placeholder"
+                tools:ignore="Autofill,TextFields" />
         </TableRow>
 
-        <!-- second row -->
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -185,18 +186,19 @@
                 android:id="@+id/addParticipantButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Add Participant"
-                android:background="@color/colorPrimaryDark" />
+                android:text="@string/participant_button"
+                android:background="@color/colorPrimaryDark"
+                tools:ignore="ButtonStyle" />
 
             <Button
                 android:id="@+id/submitEventData"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@color/colorPrimaryDark"
-                android:text="SUBMIT"/>
+                android:text="@string/submit_button"
+                tools:ignore="ButtonStyle" />
         </TableRow>
-
 
     </TableLayout>
 
-</RelativeLayout>
+</LinearLayout>

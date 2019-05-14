@@ -12,10 +12,12 @@
 
     <ImageView
         android:id="@+id/eventImage"
-        android:layout_width="100dp"
-        android:layout_height="120dp"
+        android:layout_width="120dp"
+        android:layout_height="140dp"
+        android:layout_centerVertical="true"
         android:scaleType="centerCrop"
-        android:adjustViewBounds="true" />
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/event_image_content_description" />
 
     <TextView
         android:id="@+id/eventTitle"
@@ -23,11 +25,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/eventImage"
-        android:paddingTop="8dp"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:paddingBottom="8dp"
-        android:textSize="28sp"/>
+        android:padding="@dimen/small_padding"
+        android:textSize="@dimen/medium_text"/>
 
     <TextView
         android:id="@+id/eventDate"
@@ -36,20 +35,17 @@
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/eventImage"
         android:layout_below="@id/eventTitle"
-        android:padding="8dp"
+        android:padding="@dimen/small_padding"
         android:textColor="?android:textColorSecondary"/>
 
     <TextView
         android:id="@+id/eventVenue"
         style="@style/TextAppearance.AppCompat.Subhead"
-        android:textColor="?android:textColorSecondary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/eventTitle"
-        android:layout_toEndOf="@id/eventDate"
-        android:paddingTop="8dp"
-        android:paddingRight="8dp"
-        android:paddingBottom="8dp"
-        android:paddingLeft="32dp" />
+        android:layout_alignParentEnd="true"
+        android:padding="@dimen/small_padding"
+        android:textColor="?android:textColorSecondary"/>
 
 </RelativeLayout>

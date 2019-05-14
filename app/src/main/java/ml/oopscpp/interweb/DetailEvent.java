@@ -9,8 +9,6 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 public class DetailEvent extends AppCompatActivity {
 
     @Override
