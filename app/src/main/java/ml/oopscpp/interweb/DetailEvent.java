@@ -20,15 +20,16 @@ public class DetailEvent extends AppCompatActivity {
 
         Event event = getIntent().getParcelableExtra("event");
 
-        ImageView image = findViewById(R.id.detailEventImage);
         TextView title = findViewById(R.id.detailEventTitle);
         TextView date = findViewById(R.id.detailEventDate);
+        ImageView image = findViewById(R.id.detailEventImage);
         TextView venue = findViewById(R.id.detailEventVenue);
         TableLayout table = findViewById(R.id.participantTable);
-        Glide.with(image).load("https://firebasestorage.googleapis.com/v0/b/inter-web-b3d3b.appspot.com/o/IMG_20180616_150528_2.jpg?alt=media&token=53016e9d-4854-413a-9d6d-25ca723bfe57").into(image);
-        //image.setImageURI(Uri.parse(event.getEventImage()));
+
+
         title.setText(event.getEventTitle());
         date.setText(event.getEventDate());
+        Glide.with(image).load(event.getEventImage()).into(image);
         venue.setText((event.getEventVenue()));
 
         for (int i = 0; i < event.getEventParticipants().size(); i++) {

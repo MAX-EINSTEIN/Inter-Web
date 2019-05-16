@@ -12,11 +12,12 @@
 
     <ImageView
         android:id="@+id/eventImage"
-        android:layout_width="120dp"
-        android:layout_height="140dp"
+        android:layout_width="105dp"
+        android:layout_height="125dp"
         android:layout_centerVertical="true"
         android:scaleType="centerCrop"
         android:adjustViewBounds="true"
+        android:padding="@dimen/small_padding"
         android:contentDescription="@string/event_image_content_description" />
 
     <TextView
@@ -26,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/eventImage"
         android:padding="@dimen/small_padding"
-        android:textSize="@dimen/medium_text"/>
+        android:textSize="@dimen/large_text"/>
 
     <TextView
         android:id="@+id/eventDate"

@@ -28,9 +28,9 @@ public class Event implements Parcelable {
     }
 
     public Event(Parcel source) {
-        eventImage = source.readString();
         eventTitle = source.readString();
         eventDate = source.readString();
+        eventImage = source.readString();
         eventVenue = source.readString();
         eventParticipants = source.createStringArrayList();
         eventCollaborators = source.createStringArrayList();
@@ -52,30 +52,6 @@ public class Event implements Parcelable {
         dest.writeStringList(eventCollaborators);
     }
 
-
-    public void setEventTitle(String eventTitle) {
-        this.eventTitle = eventTitle;
-    }
-
-    public void setEventDate(String eventDate) {
-        this.eventDate = eventDate;
-    }
-
-    public void setEventImage(String eventImageUri) {
-        this.eventImage = eventImageUri;
-    }
-
-    public void setEventVenue(String eventVenue) {
-        this.eventVenue = eventVenue;
-    }
-
-    public void setEventParticipants(ArrayList<String> eventParticipants) {
-        this.eventParticipants = eventParticipants;
-    }
-
-    public void setEventCollaborators(ArrayList<String> eventCollaborators) {
-        this.eventCollaborators = eventCollaborators;
-    }
 
 
     public String getEventTitle() {

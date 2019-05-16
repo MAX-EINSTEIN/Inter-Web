@@ -3,7 +3,6 @@ package ml.oopscpp.interweb;
 import android.content.Intent;
 import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 import android.util.Log;
 import android.view.View;
 import com.google.android.material.navigation.NavigationView;
@@ -19,6 +18,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
@@ -28,80 +30,12 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    EventAdapter adapter;
-    ArrayList<Event> arrayOfEvents;
-    ListView listView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        arrayOfEvents = new ArrayList<>();
-        listView = findViewById(R.id.eventList);
-
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-
-        ChildEventListener childEventListener = new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Event newEvent = dataSnapshot.getValue(Event.class);
-                //adapter.add(newEvent);
-                adapter = new EventAdapter(MainActivity.this, arrayOfEvents);
-                // Attach the adapter to a ListView
-                listView.setAdapter(adapter);
-
-                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                        Intent detailEventLauncher = new Intent(MainActivity.this, DetailEvent.class);
-                        Event currentEvent = adapter.getItem(position);
-                        detailEventLauncher.putExtra("event",currentEvent);
-                        startActivity(detailEventLauncher);
-                    }
-                });
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        };
-
-        DatabaseReference mEventsDatabase = mDatabase.child("events");
-        mEventsDatabase.addChildEventListener(childEventListener);
-
-//        // Populating ListView
-//        Intent intent = getIntent();
-//        if(intent != null){
-//            String uniqueId = intent.getStringExtra("uniqueId");
-//            if(uniqueId != null){
-//                if(uniqueId.equals("NewEvent")){
-//                    Event newEvent = intent.getParcelableExtra("newEvent");
-//                    arrayOfEvents.add(newEvent);
-//                }
-//            }
-//        }
-
-
-
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -120,6 +54,12 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        if(savedInstanceState == null){
+            getSupportFragmentManager().beginTransaction().add(R.id.fragment,new EventFragment()).commit();
+            navigationView.setCheckedItem(R.id.nav_event);
+        }
+
     }
 
     @Override
@@ -161,9 +101,13 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_event) {
-
+            for (Fragment fragment:getSupportFragmentManager().getFragments())
+               if(fragment!=null) getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.fragment,new EventFragment()).commit();
         } else if (id == R.id.nav_gallery) {
-
+            for (Fragment fragment:getSupportFragmentManager().getFragments())
+                if(fragment!=null) getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.fragment,new GalleryFragment()).commit();
         } else if (id == R.id.nav_participants) {
 
         } else if (id == R.id.nav_winners) {
