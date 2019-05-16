@@ -9,13 +9,17 @@ public class Event implements Parcelable {
 
     private String eventTitle;
     private String eventDate;
-    private String eventImageUri;
+    private String eventImage;
     private String eventVenue;
     private ArrayList<String> eventParticipants;
     private ArrayList<String> eventCollaborators;
 
-    public Event(Uri imageUri, String title, String date, String venue, ArrayList<String> participants, ArrayList<String> collaborators){
-        this.eventImageUri = imageUri.toString();
+    public Event(){
+
+    }
+
+    public Event(String imageUri, String title, String date, String venue, ArrayList<String> participants, ArrayList<String> collaborators){
+        this.eventImage = imageUri;
         this.eventTitle = title;
         this.eventDate = date;
         this.eventVenue = venue;
@@ -24,7 +28,7 @@ public class Event implements Parcelable {
     }
 
     public Event(Parcel source) {
-        eventImageUri = source.readString();
+        eventImage = source.readString();
         eventTitle = source.readString();
         eventDate = source.readString();
         eventVenue = source.readString();
@@ -40,13 +44,39 @@ public class Event implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(eventImageUri);
         dest.writeString(eventTitle);
         dest.writeString(eventDate);
+        dest.writeString(eventImage);
         dest.writeString(eventVenue);
         dest.writeStringList(eventParticipants);
         dest.writeStringList(eventCollaborators);
     }
+
+
+    public void setEventTitle(String eventTitle) {
+        this.eventTitle = eventTitle;
+    }
+
+    public void setEventDate(String eventDate) {
+        this.eventDate = eventDate;
+    }
+
+    public void setEventImage(String eventImageUri) {
+        this.eventImage = eventImageUri;
+    }
+
+    public void setEventVenue(String eventVenue) {
+        this.eventVenue = eventVenue;
+    }
+
+    public void setEventParticipants(ArrayList<String> eventParticipants) {
+        this.eventParticipants = eventParticipants;
+    }
+
+    public void setEventCollaborators(ArrayList<String> eventCollaborators) {
+        this.eventCollaborators = eventCollaborators;
+    }
+
 
     public String getEventTitle() {
         return eventTitle;
@@ -57,7 +87,7 @@ public class Event implements Parcelable {
     }
 
     public String getEventImage() {
-        return eventImageUri;
+        return eventImage;
     }
 
     public String getEventVenue(){ return eventVenue;}

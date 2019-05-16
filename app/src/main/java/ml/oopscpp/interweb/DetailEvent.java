@@ -9,6 +9,8 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 public class DetailEvent extends AppCompatActivity {
 
     @Override
@@ -23,8 +25,8 @@ public class DetailEvent extends AppCompatActivity {
         TextView date = findViewById(R.id.detailEventDate);
         TextView venue = findViewById(R.id.detailEventVenue);
         TableLayout table = findViewById(R.id.participantTable);
-
-        image.setImageURI(Uri.parse(event.getEventImage()));
+        Glide.with(image).load("https://firebasestorage.googleapis.com/v0/b/inter-web-b3d3b.appspot.com/o/IMG_20180616_150528_2.jpg?alt=media&token=53016e9d-4854-413a-9d6d-25ca723bfe57").into(image);
+        //image.setImageURI(Uri.parse(event.getEventImage()));
         title.setText(event.getEventTitle());
         date.setText(event.getEventDate());
         venue.setText((event.getEventVenue()));

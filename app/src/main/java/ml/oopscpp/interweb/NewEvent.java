@@ -12,6 +12,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 
 public class NewEvent extends AppCompatActivity {
@@ -92,10 +95,14 @@ public class NewEvent extends AppCompatActivity {
             TextView title = findViewById(R.id.newEventTitle);
             TextView date = findViewById(R.id.newEventDate);
             TextView venue = findViewById(R.id.newEventVenue);
-            Event newEvent = new Event(imageUri,title.getText().toString(),date.getText().toString(),venue.getText().toString(),participants,collaborators);
-            Intent addToList = new Intent(NewEvent.this,MainActivity.class);
-            addToList.putExtra("newEvent",newEvent);
-            addToList.putExtra("uniqueId","NewEvent");
-            startActivity(addToList);
+            Event newEvent = new Event(imageUri.toString(),title.getText().toString(),date.getText().toString(),venue.getText().toString(),participants,collaborators);
+            // Writing to Database
+            String userId = "event" + imageUri.hashCode();
+            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+            mDatabase.child("events").child(userId).setValue(newEvent);
+            //Intent addToList = new Intent(NewEvent.this,MainActivity.class);
+            //addToList.putExtra("newEvent",newEvent);
+            //addToList.putExtra("uniqueId","NewEvent");
+            //startActivity(addToList);
     }
 }

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "956904664858",
+    "firebase_url": "https://inter-web-b3d3b.firebaseio.com",
+    "project_id": "inter-web-b3d3b",
+    "storage_bucket": "inter-web-b3d3b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:956904664858:android:04d311a70eefc997",
+        "android_client_info": {
+          "package_name": "ml.oopscpp.interweb"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "956904664858-2fpvjhfbdgd0bb0liaf551e7u9tle9ar.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ml.oopscpp.interweb",
+            "certificate_hash": "566d82f98a333300987d1f609b63a774479bfbfa"
+          }
+        },
+        {
+          "client_id": "956904664858-rapi5m6phulbh2db8vutkb67k42e80qs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxT5PedoVoEM0T5sW-kM2iaiDQR6lJU_Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "956904664858-rapi5m6phulbh2db8vutkb67k42e80qs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

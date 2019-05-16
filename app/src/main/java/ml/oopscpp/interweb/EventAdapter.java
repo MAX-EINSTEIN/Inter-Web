@@ -10,6 +10,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 
 public class EventAdapter extends ArrayAdapter<Event>{
 
@@ -34,7 +36,8 @@ public class EventAdapter extends ArrayAdapter<Event>{
         TextView date = convertView.findViewById(R.id.eventDate);
         TextView venue = convertView.findViewById(R.id.eventVenue);
         // Populate the data into the template view using the data object
-        image.setImageURI(Uri.parse(event.getEventImage()));
+        Glide.with(image).load("https://firebasestorage.googleapis.com/v0/b/inter-web-b3d3b.appspot.com/o/IMG_20180616_150528_2.jpg?alt=media&token=53016e9d-4854-413a-9d6d-25ca723bfe57").into(image);
+        //image.setImageURI(Uri.parse(event.getEventImage()));
         title.setText(event.getEventTitle());
         date.setText(event.getEventDate());
         venue.setText(event.getEventVenue());
