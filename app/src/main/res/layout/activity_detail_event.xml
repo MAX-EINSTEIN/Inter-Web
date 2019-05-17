@@ -49,7 +49,7 @@
         <TableRow android:padding="8dp"
             tools:ignore="UselessParent">
             <TextView android:text="@string/participant_placeholder" android:textSize="25sp" android:textColor="@android:color/white" android:background="@color/colorPrimaryDark"/>
-            <TextView android:text="@string/institute_placeholder" android:textSize="25sp" android:textColor="@android:color/white" android:background="@color/colorPrimaryDark"/>
+            <TextView android:text="@string/contact_placeholder" android:textSize="25sp" android:textColor="@android:color/white" android:background="@color/colorPrimaryDark"/>
         </TableRow>
     </TableLayout>
 

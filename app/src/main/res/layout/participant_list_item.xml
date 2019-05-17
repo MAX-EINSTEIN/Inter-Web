@@ -1,24 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/eventCard"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/event_list_background"
-    android:elevation="8dp"
+    android:background="@drawable/participant_list_background"
+    android:elevation="4dp"
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp">
 
-    <ImageView
+    <ml.oopscpp.interweb.RoundedImageView
         android:id="@+id/participantImage"
-        android:layout_width="116dp"
-        android:layout_height="116dp"
-        android:layout_centerVertical="true"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
         android:scaleType="centerCrop"
         android:adjustViewBounds="true"
-        android:padding="@dimen/small_padding"
-        android:contentDescription="@string/event_image_content_description" />
+        android:layout_margin="8dp"/>
 
     <TextView
         android:id="@+id/participantName"
@@ -27,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/participantImage"
         android:padding="@dimen/small_padding"
-        android:textSize="@dimen/large_text"/>
+        android:textSize="@dimen/medium_text"/>
 
     <TextView
         android:id="@+id/participantContact"
@@ -36,16 +33,6 @@
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/participantImage"
         android:layout_below="@id/participantName"
-        android:padding="@dimen/small_padding"
-        android:textColor="?android:textColorSecondary"/>
-
-    <TextView
-        android:id="@+id/eventVenue"
-        style="@style/TextAppearance.AppCompat.Subhead"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/participantName"
-        android:layout_alignParentEnd="true"
         android:padding="@dimen/small_padding"
         android:textColor="?android:textColorSecondary"/>
 

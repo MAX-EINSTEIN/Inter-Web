@@ -1,6 +1,5 @@
 package ml.oopscpp.interweb;
 
-import java.util.ArrayList;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,10 +10,12 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
 
-public class EventAdapter extends ArrayAdapter<Event>{
 
-    public EventAdapter(Context context,ArrayList<Event> events){
+public class ParticipantAdapter extends ArrayAdapter<Participant>{
+
+    public ParticipantAdapter(Context context, ArrayList<Participant> events){
         super(context,0,events);
     }
 
@@ -23,22 +24,20 @@ public class EventAdapter extends ArrayAdapter<Event>{
 
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.event_list_item, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.participant_list_item, parent, false);
         }
 
         // Get the data item for this position
-        Event event = getItem(position);
+        Participant participant = getItem(position);
 
-        // Lookup view for data population
-        TextView title = convertView.findViewById(R.id.participantName);
-        TextView date = convertView.findViewById(R.id.participantContact);
         ImageView image = convertView.findViewById(R.id.participantImage);
-        TextView venue = convertView.findViewById(R.id.eventVenue);
+        TextView name = convertView.findViewById(R.id.participantName);
+        TextView contact = convertView.findViewById(R.id.participantContact);
 
-        title.setText(event.getEventTitle());
-        date.setText(event.getEventDate());
-        Glide.with(image).load(event.getEventImage()).into(image);
-        venue.setText(event.getEventVenue());
+       image.setImageResource(participant.getParticipantImage());
+       name.setText(participant.getParticipantName());
+       contact.setText(participant.getParticipantContact());
+
         // Return the completed view to render on screen
         return convertView;
     }

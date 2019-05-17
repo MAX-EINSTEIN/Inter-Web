@@ -1,8 +1,6 @@
 package ml.oopscpp.interweb;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -38,6 +37,9 @@ public class EventFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // Set Toolbar's title
+        getActivity().setTitle("Events");
+
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_event, container, false);
 
@@ -112,6 +114,21 @@ public class EventFragment extends Fragment {
                 Event currentEvent = adapter.getItem(position);
                 detailEventLauncher.putExtra("event",currentEvent);
                 startActivity(detailEventLauncher);
+            }
+        });
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+
+        MainActivity mainActivity = (MainActivity)getActivity();
+        mainActivity.fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent newEventActivity = new Intent(getActivity(),NewEvent.class);
+                startActivity(newEventActivity);
             }
         });
     }

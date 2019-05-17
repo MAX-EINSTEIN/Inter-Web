@@ -163,7 +163,7 @@
                 android:id="@+id/instituteLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/institute_placeholder"
+                android:text="@string/contact_placeholder"
                 android:textAllCaps="true"
                 android:textAppearance="?android:attr/textAppearanceMedium"/>
 
@@ -172,7 +172,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="@string/institute_placeholder"
+                android:hint="@string/contact_placeholder"
                 tools:ignore="Autofill,TextFields" />
         </TableRow>
 
