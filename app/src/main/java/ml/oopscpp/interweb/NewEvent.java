@@ -2,6 +2,7 @@ package ml.oopscpp.interweb;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class NewEvent extends AppCompatActivity {
 
@@ -32,47 +34,13 @@ public class NewEvent extends AppCompatActivity {
     Uri imageUri;
     String imageUrl;
 
-    private Button button;
-
     private ArrayList<String> participants;
     private ArrayList<String> collaborators;
-
-    private Button addParticipantButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_event);
-
-        image = findViewById(R.id.newEventImage);
-
-        image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openGallery();
-            }
-        });
-
-        button = findViewById(R.id.submitEventData);
-
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                submitEventData();
-            }
-        });
-
-        participants = new ArrayList<>();
-        collaborators = new ArrayList<>();
-
-        addParticipantButton =  findViewById(R.id.addParticipantButton);
-
-        addParticipantButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addParticipantsToLists();
-            }
-        });
+        setNewEventLayout();
     }
 
     private void openGallery(){
@@ -114,7 +82,7 @@ public class NewEvent extends AppCompatActivity {
                 @Override
                 public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
                     if (!task.isSuccessful()) {
-                        throw task.getException();
+                        throw Objects.requireNonNull(task.getException());
                     }
 
                     // Continue with the task to get the download URL
@@ -126,34 +94,25 @@ public class NewEvent extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         Uri downloadUri = task.getResult();
                         Toast.makeText(getApplicationContext(),"Image Url received",Toast.LENGTH_SHORT).show();
-                        imageUrl = downloadUri.toString();
+                        imageUrl = Objects.requireNonNull(downloadUri).toString();
                         Log.e("NewEvent",imageUrl);
-                    } else {
-                        // Handle failures
-                        // ...
-                    }
+                    }  // Handle failures
+                    // ...
+
                 }
             });
 
+            //Just for removing the warning
+            urlTask.getResult();
 
         }
     }
 
     private void addParticipantsToLists(){
-        TextView participantName = findViewById(R.id.newParticipantName);
-        TextView instituteName = findViewById(R.id.newInstituteName);
-
-        if(!participantName.getText().toString().equals("")){
-            participants.add(participantName.getText().toString());
-            collaborators.add(instituteName.getText().toString());
-            String value = "New Participant: " + participantName.getText().toString() + ", Institute: " + participantName.getText().toString() + " added";
-            Toast.makeText(getApplicationContext(), value, Toast.LENGTH_SHORT).show();
-        }
-        else {
-            Toast.makeText(getApplicationContext(),"Participant name required", Toast.LENGTH_SHORT).show();
-        }
-        participantName.setText("");
-        instituteName.setText("");
+        setContentView(R.layout.activity_add_participant);
+        for (Fragment fragment:getSupportFragmentManager().getFragments())
+            if(fragment!=null) getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.fragmentContainer,new ParticipantFragment()).commit();
     }
 
     private void submitEventData(){
@@ -171,5 +130,39 @@ public class NewEvent extends AppCompatActivity {
             // Returning Back to Main Activity
             Intent backToMain = new Intent(NewEvent.this,MainActivity.class);
             startActivity(backToMain);
+    }
+
+    public void setNewEventLayout(){
+        setContentView(R.layout.activity_new_event);
+
+        image = findViewById(R.id.newEventImage);
+
+        image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openGallery();
+            }
+        });
+
+        Button button = findViewById(R.id.submitEventData);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                submitEventData();
+            }
+        });
+
+        participants = new ArrayList<>();
+        collaborators = new ArrayList<>();
+
+        Button addParticipantButton = findViewById(R.id.addParticipantButton);
+
+        addParticipantButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addParticipantsToLists();
+            }
+        });
     }
 }

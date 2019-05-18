@@ -9,10 +9,10 @@
     <ImageView
         android:id="@+id/newEventImage"
         android:layout_width="match_parent"
-        android:layout_height="220dp"
+        android:layout_height="0dp"
         android:layout_weight="1"
         android:scaleType="centerCrop"
-        android:background="@drawable/pick_image_icon"
+        android:background="@drawable/add_image_icon_light"
         android:contentDescription="@string/event_image_content_description" />
 
 
@@ -30,7 +30,6 @@
         android:id="@+id/eventBriefDetails"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:padding="8dp"
         android:stretchColumns="*"
         android:shrinkColumns="*">
@@ -38,14 +37,14 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:background="@color/colorAccent">
+            android:gravity="center">
 
             <TextView
                 android:id="@+id/titleLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/title_placeholder"
+                android:textColor="@android:color/black"
                 android:textAllCaps="true"
                 android:textAppearance="?android:attr/textAppearanceMedium"/>
 
@@ -63,14 +62,14 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:background="#0091EA">
+            android:gravity="center">
 
             <TextView
                 android:id="@+id/dateLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/date_placeholder"
+                android:textColor="@android:color/black"
                 android:textAllCaps="true"
                 android:textAppearance="?android:attr/textAppearanceMedium"/>
 
@@ -87,14 +86,14 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:background="@color/colorPrimaryDark">
+            android:gravity="center">
 
             <TextView
                 android:id="@+id/venueLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/venue_placeholder"
+                android:textColor="@android:color/black"
                 android:textAllCaps="true"
                 android:textAppearance="?android:attr/textAppearanceMedium"/>
 
@@ -123,7 +122,6 @@
         android:id="@+id/eventParticipantDetails"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:padding="8dp"
         android:stretchColumns="*"
         android:shrinkColumns="*">
@@ -131,14 +129,14 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:background="@color/colorAccent">
+            android:gravity="center">
 
             <TextView
                 android:id="@+id/nameLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/participant_placeholder"
+                android:textColor="@android:color/black"
                 android:textAllCaps="true"
                 android:textAppearance="?android:attr/textAppearanceMedium"/>
 
@@ -156,14 +154,14 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:background="#0091EA">
+            android:gravity="center">
 
             <TextView
                 android:id="@+id/instituteLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/contact_placeholder"
+                android:textColor="@android:color/black"
                 android:textAllCaps="true"
                 android:textAppearance="?android:attr/textAppearanceMedium"/>
 
@@ -187,6 +185,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/participant_button"
+                android:textColor="@color/plain_white"
+                android:textAlignment="center"
                 android:background="@color/colorPrimaryDark"
                 tools:ignore="ButtonStyle" />
 
@@ -196,6 +196,7 @@
                 android:layout_height="wrap_content"
                 android:background="@color/colorPrimaryDark"
                 android:text="@string/submit_button"
+                android:textColor="@color/plain_white"
                 tools:ignore="ButtonStyle" />
         </TableRow>
 

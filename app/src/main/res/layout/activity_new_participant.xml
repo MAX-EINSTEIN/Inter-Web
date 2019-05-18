@@ -1,17 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".NewParticipant">
+
+    <RelativeLayout
+        android:id="@+id/imageClickArea"
+        android:layout_width="match_parent"
+        android:background="@drawable/add_image_icon_light"
+        android:layout_height="160dp">
+        <ml.oopscpp.interweb.RoundedImageView
+            android:id="@+id/newParticipantImage"
+            android:layout_width="144dp"
+            android:layout_height="144dp"
+            android:layout_centerInParent="true" />
+    </RelativeLayout>
+
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Welcome New Participant"
-        android:textAlignment="center"
-        android:background="@color/colorAccent"
-        android:textSize="@dimen/large_text"/>
+        android:layout_height="wrap_content"
+        android:text="@string/participant_detail_heading"
+        android:textSize="@dimen/medium_text"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
+        android:padding="4dp"
+        />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:stretchColumns="*"
+        android:shrinkColumns="*">
+        <TableRow android:padding="8dp"
+            tools:ignore="UselessParent">
+            <TextView
+                android:text="@string/participant_placeholder"
+                android:textSize="25sp"
+                android:textColor="@android:color/black" />
+            <EditText
+                android:hint="@string/participant_placeholder"/>
+        </TableRow>
+        <TableRow android:padding="8dp"
+            tools:ignore="UselessParent">
+            <TextView
+                android:text="Contact"
+                android:textSize="25sp"
+                android:textColor="@android:color/black" />
+            <EditText
+                android:hint="Mobile no. or email"/>
+        </TableRow>
+        <TableRow android:padding="8dp"
+            tools:ignore="UselessParent">
+            <TextView
+                android:text="Affiliation"
+                android:textSize="25sp"
+                android:textColor="@android:color/black" />
+            <EditText
+                android:hint="Affiliating organisation"/>
+        </TableRow>
+        <TableRow android:padding="8dp"
+            tools:ignore="UselessParent">
+            <TextView
+                android:text="Age"
+                android:textSize="25sp"
+                android:textColor="@android:color/black" />
+            <EditText
+                android:hint="Age in years"/>
+        </TableRow>
+    </TableLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="About Participant"
+            android:textSize="@dimen/medium_text"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            android:padding="4dp"/>
+
+        <EditText
+            android:id="@+id/editText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:gravity="start|top"
+            android:inputType="textMultiLine" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Submit"
+            android:hint="About the participant"
+            android:textColor="@android:color/white"
+            android:background="@color/colorPrimary"/>
+    </LinearLayout>
+
+
+</LinearLayout>
