@@ -43,6 +43,10 @@ public class ParticipantFragment extends Fragment {
         // Set Toolbar's title
         Objects.requireNonNull(getActivity()).setTitle("Participants");
 
+        if(getActivity() instanceof SelectParticipant){
+            getActivity().setTitle("Select Participants");
+        }
+
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_participant, container, false);
 
@@ -57,28 +61,27 @@ public class ParticipantFragment extends Fragment {
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Log.e("Main",dataSnapshot.getValue(Participant.class).toString());
                 Participant newParticipant = dataSnapshot.getValue(Participant.class);
+                if(newParticipant != null)
                 participants.add(newParticipant);
-                if(participants!=null)
+                if(participants!=null && getContext() != null)
                 adapter = new ParticipantAdapter(getContext(), participants);
                 // Attach the adapter to a ListView
                 participantList.setAdapter(adapter);
-                if(getActivity() instanceof NewEvent){
-                    getActivity().setTitle("Select Participant");
+                if(getActivity() instanceof SelectParticipant){
                     addOnClickListenerToListViewItem();
                 }
-
             }
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Participant newParticipant = dataSnapshot.getValue(Participant.class);
+                if(newParticipant != null)
                 participants.add(newParticipant);
-                if(participants!=null)
+                if(participants!=null && getContext() != null)
                 adapter = new ParticipantAdapter(getContext(), participants);
                 // Attach the adapter to a ListView
                 participantList.setAdapter(adapter);
-                if(getActivity() instanceof NewEvent){
-                    getActivity().setTitle("Select Participant");
+                if(getActivity() instanceof SelectParticipant){
                     addOnClickListenerToListViewItem();
                 }
             }
@@ -86,13 +89,13 @@ public class ParticipantFragment extends Fragment {
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
                 Participant newParticipant = dataSnapshot.getValue(Participant.class);
+                if(newParticipant != null)
                 participants.add(newParticipant);
-                if(participants!=null)
+                if(participants!=null && getContext() != null)
                 adapter = new ParticipantAdapter(getContext(), participants);
                 // Attach the adapter to a ListView
                 participantList.setAdapter(adapter);
-                if(getActivity() instanceof NewEvent){
-                    getActivity().setTitle("Select Participant");
+                if(getActivity() instanceof SelectParticipant){
                     addOnClickListenerToListViewItem();
                 }
             }
@@ -100,13 +103,13 @@ public class ParticipantFragment extends Fragment {
             @Override
             public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Participant newParticipant = dataSnapshot.getValue(Participant.class);
+                if(newParticipant != null)
                 participants.add(newParticipant);
-                if(participants!=null)
+                if(participants!=null && getContext() != null)
                 adapter = new ParticipantAdapter(getContext(), participants);
                 // Attach the adapter to a ListView
                 participantList.setAdapter(adapter);
-                if(getActivity() instanceof NewEvent){
-                    getActivity().setTitle("Select Participant");
+                if(getActivity() instanceof SelectParticipant){
                     addOnClickListenerToListViewItem();
                 }
             }
@@ -150,15 +153,8 @@ public class ParticipantFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Participant currentParticipant = adapter.getItem(position);
                 Toast.makeText(getContext(), Objects.requireNonNull(currentParticipant).getParticipantName(), Toast.LENGTH_SHORT).show();
-
-                NewEvent parentActivity = (NewEvent) getActivity();
-                parentActivity.addParticipant(currentParticipant.getParticipantName(),currentParticipant.getParticipantContact());
-
-                for (Fragment fragment: Objects.requireNonNull(parentActivity).getSupportFragmentManager().getFragments())
-                    if(fragment!=null) parentActivity.getSupportFragmentManager().beginTransaction().remove(fragment).commit();
-
-                parentActivity.setTitle("Add New Event");
-                parentActivity.setNewEventLayout();
+                SelectParticipant parent = (SelectParticipant) getActivity();
+                parent.returnResult(currentParticipant.getParticipantName(),currentParticipant.getParticipantContact());
             }
         });
     }

@@ -10,7 +10,12 @@ public class Participant {
     private String participantAbout;
 
     Participant(){
-
+        this.participantImage = "";
+        this.participantName = "";
+        this.participantContact = "";
+        this.participantAffiliation = "";
+        this.participantAge = "";
+        this.participantAbout = "";
     }
 
     Participant(String image,String name, String contact){

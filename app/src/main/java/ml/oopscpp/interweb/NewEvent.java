@@ -32,7 +32,8 @@ public class NewEvent extends AppCompatActivity {
 
     private ImageView image;
     private static final int PICK_IMAGE = 1;
-    private static final int SELECT_PARTICIPANT = 2;
+    private static final int ADD_PARTICIPANT = 2;
+    private static final  int SELECT_PARTICIPANT = 3;
     private Uri imageUri;
     private String imageUrl;
 
@@ -42,7 +43,49 @@ public class NewEvent extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setNewEventLayout();
+
+        setContentView(R.layout.activity_new_event);
+
+        image = findViewById(R.id.newEventImage);
+
+        image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openGallery();
+            }
+        });
+
+        Button button = findViewById(R.id.submitEventData);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                submitEventData();
+            }
+        });
+
+        participants = new ArrayList<>();
+        contacts = new ArrayList<>();
+
+        Button addParticipantButton = findViewById(R.id.addParticipantButton);
+
+        addParticipantButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addParticipantsToLists();
+            }
+        });
+
+        Button newParticipantButton = findViewById((R.id.newParticipantButton));
+        newParticipantButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e("UNIQUE","Starting Activity for result");
+                Intent newParticipantActivity = new Intent(NewEvent.this,NewParticipant.class);
+                startActivityForResult(newParticipantActivity,ADD_PARTICIPANT);
+            }
+        });
+
     }
 
     private void openGallery(){
@@ -104,8 +147,11 @@ public class NewEvent extends AppCompatActivity {
                 }
             });
         }
-        else if(resultCode == RESULT_OK && requestCode == SELECT_PARTICIPANT){
+        else if(resultCode == RESULT_OK && requestCode == ADD_PARTICIPANT){
             addParticipant(data.getStringExtra("participantName"),data.getStringExtra("participantContact"));
+        }
+        else if(resultCode == RESULT_OK && requestCode == SELECT_PARTICIPANT){
+            addParticipant(data.getStringExtra("name"),data.getStringExtra("contact"));
         }
     }
 
@@ -116,10 +162,8 @@ public class NewEvent extends AppCompatActivity {
     }
 
     private void addParticipantsToLists(){
-        setContentView(R.layout.fragment_add_participant);
-        for (Fragment fragment:getSupportFragmentManager().getFragments())
-            if(fragment!=null) getSupportFragmentManager().beginTransaction().remove(fragment).commit();
-        getSupportFragmentManager().beginTransaction().add(R.id.fragmentContainer,new ParticipantFragment()).commit();
+        Intent getResult = new Intent(NewEvent.this,SelectParticipant.class);
+        startActivityForResult(getResult,SELECT_PARTICIPANT);
     }
 
     private void submitEventData(){
@@ -132,80 +176,25 @@ public class NewEvent extends AppCompatActivity {
                 contacts.add("10");
             }
 
+            String eventId;
+
             if(imageUrl == null){
                 imageUrl = "https://www.gstatic.com/mobilesdk/160503_mobilesdk/logo/2x/firebase_28dp.png";
+                eventId = "event" + "00000000000000000000000000000";
+            }else {
+                eventId = "event" + imageUri.hashCode();
             }
 
             Event newEvent = new Event(imageUrl,title.getText().toString(),date.getText().toString(),venue.getText().toString(),participants, contacts);
 
             // Writing to Firebase Realtime Database
-            String eventId = "event" + imageUri.hashCode();
+
             DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
             mDatabase.child("events").child(eventId).setValue(newEvent);
 
             // Returning Back to Main Activity
             Intent backToMain = new Intent(NewEvent.this,MainActivity.class);
             startActivity(backToMain);
-    }
-
-    public void setNewEventLayout(){
-        setContentView(R.layout.activity_new_event);
-
-        image = findViewById(R.id.newEventImage);
-
-        image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openGallery();
-            }
-        });
-
-        Button button = findViewById(R.id.submitEventData);
-
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                submitEventData();
-            }
-        });
-
-        participants = new ArrayList<>();
-        contacts = new ArrayList<>();
-
-        Button addParticipantButton = findViewById(R.id.addParticipantButton);
-
-        addParticipantButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addParticipantsToLists();
-            }
-        });
-
-        Button newParticipantButton = findViewById((R.id.newParticipantButton));
-        newParticipantButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.e("UNIQUE","Starting Activity for result");
-                Intent newParticipantActivity = new Intent(NewEvent.this,NewParticipant.class);
-                startActivityForResult(newParticipantActivity,SELECT_PARTICIPANT);
-            }
-        });
-    }
-
-    @Override
-    public void onBackPressed() {
-        if(getTitle().equals("Select Participant")){
-            for (Fragment fragment:getSupportFragmentManager().getFragments())
-                if(fragment!=null)
-                {
-                    getSupportFragmentManager().beginTransaction().remove(fragment).commit();
-                    setTitle("New Event");
-                    setNewEventLayout();
-                }
-        }
-        else {
-            super.onBackPressed();
-        }
     }
 
 }

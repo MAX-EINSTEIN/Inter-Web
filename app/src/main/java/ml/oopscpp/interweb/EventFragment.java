@@ -57,8 +57,10 @@ public class EventFragment extends Fragment {
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Log.e("Main",dataSnapshot.getValue(Event.class).toString());
                 Event newEvent = dataSnapshot.getValue(Event.class);
+                if(newEvent!=null)
                 arrayOfEvents.add(newEvent);
                 //adapter.add(newEvent);
+                if(arrayOfEvents !=null && getContext()!=null)
                 adapter = new EventAdapter(getContext(), arrayOfEvents);
                 // Attach the adapter to a ListView
                 listView.setAdapter(adapter);
@@ -68,8 +70,10 @@ public class EventFragment extends Fragment {
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Event newEvent = dataSnapshot.getValue(Event.class);
+                if(newEvent!=null)
                 arrayOfEvents.add(newEvent);
                 //adapter.add(newEvent);
+                if(arrayOfEvents !=null && getContext()!=null)
                 adapter = new EventAdapter(getContext(), arrayOfEvents);
                 // Attach the adapter to a ListView
                 listView.setAdapter(adapter);
@@ -79,8 +83,10 @@ public class EventFragment extends Fragment {
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
                 Event newEvent = dataSnapshot.getValue(Event.class);
+                if(newEvent!=null)
                 arrayOfEvents.add(newEvent);
                 //adapter.add(newEvent);
+                if(arrayOfEvents !=null && getContext()!=null)
                 adapter = new EventAdapter(getContext(), arrayOfEvents);
                 // Attach the adapter to a ListView
                 listView.setAdapter(adapter);
@@ -90,8 +96,10 @@ public class EventFragment extends Fragment {
             @Override
             public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Event newEvent = dataSnapshot.getValue(Event.class);
+                if(newEvent!=null)
                 arrayOfEvents.add(newEvent);
                 //adapter.add(newEvent);
+                if(arrayOfEvents !=null && getContext()!=null)
                 adapter = new EventAdapter(getContext(), arrayOfEvents);
                 // Attach the adapter to a ListView
                 listView.setAdapter(adapter);

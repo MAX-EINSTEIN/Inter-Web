@@ -54,8 +54,10 @@ public class GalleryFragment extends Fragment {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Event newEvent = dataSnapshot.getValue(Event.class);
+                if(newEvent!=null)
                 arrayOfImageUrls.add(newEvent.getEventImage());
                 //adapter.add(new Image Url);
+                if(getContext()!=null && arrayOfImageUrls != null)
                 adapter = new ImageAdapter(getContext(), arrayOfImageUrls);
                 // Attach the adapter to a ListView
                 imageList.setAdapter(adapter);
