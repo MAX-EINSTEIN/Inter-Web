@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -45,6 +46,9 @@ public class EventFragment extends Fragment {
 
         arrayOfEvents = new ArrayList<>();
         listView = rootView.findViewById(R.id.eventList);
+        listView.setHeaderDividersEnabled(true);
+        listView.setFooterDividersEnabled(true);
+        listView.setNestedScrollingEnabled(true);
 
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
 

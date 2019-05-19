@@ -46,6 +46,7 @@ public class GalleryFragment extends Fragment {
 
         arrayOfImageUrls = new ArrayList<>();
         imageList = rootView.findViewById(R.id.imageList);
+        imageList.setNestedScrollingEnabled(true);
 
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
         DatabaseReference mEventsDatabase = mDatabase.child("events");

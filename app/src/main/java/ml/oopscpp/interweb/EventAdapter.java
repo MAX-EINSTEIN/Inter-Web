@@ -14,9 +14,7 @@ import com.bumptech.glide.Glide;
 
 public class EventAdapter extends ArrayAdapter<Event>{
 
-    public EventAdapter(Context context,ArrayList<Event> events){
-        super(context,0,events);
-    }
+    public EventAdapter(Context context,ArrayList<Event> events){ super(context,0,events); }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {

@@ -3,6 +3,7 @@ package ml.oopscpp.interweb;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -31,11 +32,12 @@ public class NewEvent extends AppCompatActivity {
 
     private ImageView image;
     private static final int PICK_IMAGE = 1;
-    Uri imageUri;
-    String imageUrl;
+    private static final int SELECT_PARTICIPANT = 2;
+    private Uri imageUri;
+    private String imageUrl;
 
     private ArrayList<String> participants;
-    private ArrayList<String> collaborators;
+    private ArrayList<String> contacts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +57,7 @@ public class NewEvent extends AppCompatActivity {
             imageUri = data.getData();
             image.setImageURI(imageUri);
 
-            // TODO :Uploading selected image to Firebase Storage
+            // Uploading selected image to Firebase Storage
             FirebaseStorage storage = FirebaseStorage.getInstance();
 
             StorageReference storageRef = storage.getReference();
@@ -101,15 +103,20 @@ public class NewEvent extends AppCompatActivity {
 
                 }
             });
-
-            //Just for removing the warning
-            urlTask.getResult();
-
+        }
+        else if(resultCode == RESULT_OK && requestCode == SELECT_PARTICIPANT){
+            addParticipant(data.getStringExtra("participantName"),data.getStringExtra("participantContact"));
         }
     }
 
+    public void addParticipant(String name,String contact){
+        participants.add(name);
+        contacts.add(contact);
+        Toast.makeText(getApplicationContext(),name+contact,Toast.LENGTH_SHORT).show();
+    }
+
     private void addParticipantsToLists(){
-        setContentView(R.layout.activity_add_participant);
+        setContentView(R.layout.fragment_add_participant);
         for (Fragment fragment:getSupportFragmentManager().getFragments())
             if(fragment!=null) getSupportFragmentManager().beginTransaction().remove(fragment).commit();
         getSupportFragmentManager().beginTransaction().add(R.id.fragmentContainer,new ParticipantFragment()).commit();
@@ -120,7 +127,16 @@ public class NewEvent extends AppCompatActivity {
             TextView date = findViewById(R.id.newEventDate);
             TextView venue = findViewById(R.id.newEventVenue);
 
-            Event newEvent = new Event(imageUrl,title.getText().toString(),date.getText().toString(),venue.getText().toString(),participants,collaborators);
+            if(participants == null){
+                participants.add("A");
+                contacts.add("10");
+            }
+
+            if(imageUrl == null){
+                imageUrl = "https://www.gstatic.com/mobilesdk/160503_mobilesdk/logo/2x/firebase_28dp.png";
+            }
+
+            Event newEvent = new Event(imageUrl,title.getText().toString(),date.getText().toString(),venue.getText().toString(),participants, contacts);
 
             // Writing to Firebase Realtime Database
             String eventId = "event" + imageUri.hashCode();
@@ -154,7 +170,7 @@ public class NewEvent extends AppCompatActivity {
         });
 
         participants = new ArrayList<>();
-        collaborators = new ArrayList<>();
+        contacts = new ArrayList<>();
 
         Button addParticipantButton = findViewById(R.id.addParticipantButton);
 
@@ -164,5 +180,32 @@ public class NewEvent extends AppCompatActivity {
                 addParticipantsToLists();
             }
         });
+
+        Button newParticipantButton = findViewById((R.id.newParticipantButton));
+        newParticipantButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e("UNIQUE","Starting Activity for result");
+                Intent newParticipantActivity = new Intent(NewEvent.this,NewParticipant.class);
+                startActivityForResult(newParticipantActivity,SELECT_PARTICIPANT);
+            }
+        });
     }
+
+    @Override
+    public void onBackPressed() {
+        if(getTitle().equals("Select Participant")){
+            for (Fragment fragment:getSupportFragmentManager().getFragments())
+                if(fragment!=null)
+                {
+                    getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+                    setTitle("New Event");
+                    setNewEventLayout();
+                }
+        }
+        else {
+            super.onBackPressed();
+        }
+    }
+
 }

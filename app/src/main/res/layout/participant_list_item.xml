@@ -11,8 +11,8 @@
 
     <ml.oopscpp.interweb.RoundedImageView
         android:id="@+id/participantImage"
-        android:layout_width="96dp"
-        android:layout_height="96dp"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
         android:scaleType="centerCrop"
         android:adjustViewBounds="true"
         android:layout_margin="8dp"/>

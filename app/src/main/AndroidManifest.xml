@@ -39,11 +39,6 @@
             android:label="@string/activity_new_participant"
             android:parentActivityName=".MainActivity"/>
 
-        <activity
-            android:name=".AddParticipant"
-            android:label="@string/activity_add_participant"
-            android:parentActivityName=".MainActivity"/>
-
     </application>
 
 </manifest>

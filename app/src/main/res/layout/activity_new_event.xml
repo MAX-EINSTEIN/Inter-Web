@@ -114,7 +114,7 @@
         android:layout_height="wrap_content"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
-        android:text="@string/participant_detail_heading"
+        android:text="Add Participants"
         android:textStyle="bold"
         android:textColor="@color/colorPrimaryDark"/>
 
@@ -131,75 +131,38 @@
             android:layout_height="match_parent"
             android:gravity="center">
 
-            <TextView
-                android:id="@+id/nameLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/participant_placeholder"
-                android:textColor="@android:color/black"
-                android:textAllCaps="true"
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
-
-            <EditText
-                android:id="@+id/newParticipantName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/participant_placeholder"
-                android:inputType="textPersonName"
-                tools:ignore="Autofill" />
-
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center">
-
-            <TextView
-                android:id="@+id/instituteLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/contact_placeholder"
-                android:textColor="@android:color/black"
-                android:textAllCaps="true"
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
-
-            <EditText
-                android:id="@+id/newInstituteName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/contact_placeholder"
-                tools:ignore="Autofill,TextFields" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:background="@color/colorPrimaryDark">
-
             <Button
                 android:id="@+id/addParticipantButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/participant_button"
-                android:textColor="@color/plain_white"
-                android:textAlignment="center"
-                android:background="@color/colorPrimaryDark"
-                tools:ignore="ButtonStyle" />
+                android:text="SELECT FROM LIST"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:elevation="16dp"
+                android:background="@drawable/participant_list_background" />
 
             <Button
-                android:id="@+id/submitEventData"
+                android:id="@+id/newParticipantButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/colorPrimaryDark"
-                android:text="@string/submit_button"
-                android:textColor="@color/plain_white"
-                tools:ignore="ButtonStyle" />
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="NEW PARTICIPANT"
+                android:elevation="16dp"
+                android:background="@drawable/participant_list_background" />
         </TableRow>
 
     </TableLayout>
 
+    <Button
+        android:id="@+id/submitEventData"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
+        android:text="CREATE EVENT"
+        android:textColor="@color/plain_white" />
 </LinearLayout>

@@ -15,8 +15,8 @@ import java.util.ArrayList;
 
 public class ParticipantAdapter extends ArrayAdapter<Participant>{
 
-    public ParticipantAdapter(Context context, ArrayList<Participant> events){
-        super(context,0,events);
+    public ParticipantAdapter(Context context, ArrayList<Participant> participants){
+        super(context,0,participants);
     }
 
     @Override
@@ -34,9 +34,9 @@ public class ParticipantAdapter extends ArrayAdapter<Participant>{
         TextView name = convertView.findViewById(R.id.participantName);
         TextView contact = convertView.findViewById(R.id.participantContact);
 
-       image.setImageResource(participant.getParticipantImage());
-       name.setText(participant.getParticipantName());
-       contact.setText(participant.getParticipantContact());
+        Glide.with(image).load(participant.getParticipantImage()).into(image);
+        name.setText(participant.getParticipantName());
+        contact.setText(participant.getParticipantContact());
 
         // Return the completed view to render on screen
         return convertView;

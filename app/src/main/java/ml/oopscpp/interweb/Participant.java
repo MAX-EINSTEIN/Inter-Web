@@ -2,23 +2,27 @@ package ml.oopscpp.interweb;
 
 public class Participant {
 
-    private int participantImage;
+    private String participantImage;
     private String participantName;
     private String participantContact;
     private String participantAffiliation;
-    private int participantAge;
+    private String participantAge;
     private String participantAbout;
 
-    Participant(int image,String name, String contact){
+    Participant(){
+
+    }
+
+    Participant(String image,String name, String contact){
         this.participantImage = image;
         this.participantName = name;
         this.participantContact = contact;
         this.participantAffiliation = "affiliation";
-        this.participantAge = 20;
+        this.participantAge = "20";
         this.participantAbout = "about";
     }
 
-    Participant(int image,String name, String contact,String affiliation,int age, String about){
+    Participant(String image,String name, String contact,String affiliation,String age, String about){
         this.participantImage = image;
         this.participantName = name;
         this.participantContact = contact;
@@ -27,7 +31,7 @@ public class Participant {
         this.participantAbout = about;
     }
 
-    public int getParticipantImage() {
+    public String getParticipantImage() {
         return participantImage;
     }
 
@@ -43,7 +47,7 @@ public class Participant {
         return participantAffiliation;
     }
 
-    public int getParticipantAge() {
+    public String getParticipantAge() {
         return participantAge;
     }
 
