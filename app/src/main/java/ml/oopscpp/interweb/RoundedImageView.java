@@ -40,7 +40,7 @@ public class RoundedImageView extends androidx.appcompat.widget.AppCompatImageVi
 
         int w = getWidth(), h = getHeight();
 
-        Bitmap roundBitmap = getRoundedCroppedBitmap(bitmap, w);
+        Bitmap roundBitmap = getRoundedCroppedBitmap(bitmap, h);
         canvas.drawBitmap(roundBitmap, 0, 0, null);
 
     }

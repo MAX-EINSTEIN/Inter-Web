@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".DetailParticipant">
+
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/picContainer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <ml.oopscpp.interweb.RoundedImageView
+            android:id="@+id/p_pic"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintDimensionRatio="1:1" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/p_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="32sp"
+        android:paddingVertical="8dp"
+        android:textStyle="bold|italic"
+        android:textAlignment="center"
+        android:layout_margin="8dp"
+        android:textColor="@color/colorPrimary"/>
+
+
+    <TextView
+        android:id="@+id/detail_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/medium_text"
+        android:textColor="@android:color/black"
+        android:layout_margin="8dp"
+        android:text="Participant's details : "/>
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:stretchColumns="*"
+        android:shrinkColumns="*">
+
+        <TableRow android:padding="8dp"
+            tools:ignore="UselessParent">
+            <TextView
+                android:text="Contact"
+                android:textSize="@dimen/medium_text"
+                android:textColor="@color/colorPrimary" />
+            <TextView
+                android:id="@+id/p_contact"
+                android:textSize="@dimen/medium_text"
+                android:textColor="@android:color/black"/>
+        </TableRow>
+        <TableRow android:padding="8dp"
+            tools:ignore="UselessParent">
+            <TextView
+                android:text="Affiliation"
+                android:textSize="@dimen/medium_text"
+                android:textColor="@color/colorPrimary" />
+            <TextView
+                android:id="@+id/p_affiliation"
+                android:textSize="@dimen/medium_text"
+                android:textColor="@android:color/black"/>
+        </TableRow>
+        <TableRow android:padding="8dp"
+            tools:ignore="UselessParent">
+            <TextView
+                android:text="Age"
+                android:textSize="@dimen/medium_text"
+                android:textColor="@color/colorPrimary"/>
+            <TextView
+                android:id="@+id/p_age"
+                android:textSize="@dimen/medium_text"
+                android:textColor="@android:color/black"/>
+        </TableRow>
+    </TableLayout>
+
+
+    <TextView
+        android:id="@+id/about_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/medium_text"
+        android:textColor="@android:color/black"
+        android:layout_margin="8dp"
+        android:text="About the participant :"/>
+    <ScrollView
+        android:id="@+id/about_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:scrollbars="none">
+        <TextView
+            android:id="@+id/p_about"
+            android:textSize="@dimen/medium_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </ScrollView>
+
+
+</LinearLayout>

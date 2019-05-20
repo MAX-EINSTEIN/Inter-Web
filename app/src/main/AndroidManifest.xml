@@ -20,29 +20,30 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".NewEvent"
             android:label="@string/activity_new_event"
             android:parentActivityName=".MainActivity" />
-
         <activity
             android:name=".DetailEvent"
             android:label="@string/activity_detail_event"
             android:parentActivityName=".MainActivity" />
-
-        <activity android:name=".SelectParticipant"
+        <activity
+            android:name=".SelectParticipant"
             android:label="Select Participants"
-            android:parentActivityName=".NewEvent"/>
-
+            android:parentActivityName=".NewEvent" />
         <activity
             android:name=".NewParticipant"
             android:label="@string/activity_new_participant"
             android:parentActivityName=".MainActivity" />
-
+        <activity
+            android:name=".DetailParticipant"
+            android:label="Participant Details"
+            android:parentActivityName=".MainActivity"/>
     </application>
 
 </manifest>

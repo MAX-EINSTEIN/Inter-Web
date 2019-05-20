@@ -17,21 +17,29 @@
             android:icon="@drawable/ic_menu_participants"
             android:title="@string/participant_menu" />
         <item
-            android:id="@+id/nav_winners"
+            android:id="@+id/nav_hall_of_fame"
             android:icon="@drawable/ic_menu_winner"
-            android:title="@string/winners_menu" />
+            android:title="Hall of Fame" />
+        <item
+            android:id="@+id/nav_venue"
+            android:icon="@mipmap/school_medium"
+            android:title="Venue"/>
+        <item
+            android:id="@+id/nav_announcements"
+            android:icon="@android:drawable/ic_lock_silent_mode_off"
+            android:title="Announcements"/>
     </group>
 
-    <item android:title="@string/celebrate_group">
+    <item android:title="Customize" android:checkable="true">
         <menu>
             <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="@string/share_menu" />
+                android:id="@+id/nav_settings"
+                android:icon="@android:drawable/ic_partial_secure"
+                android:title="Settings" />
             <item
-                android:id="@+id/nav_broadcast"
+                android:id="@+id/nav_about"
                 android:icon="@drawable/ic_menu_send"
-                android:title="@string/broadcast_menu" />
+                android:title="About" />
         </menu>
     </item>
 

@@ -35,8 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/detailEventTitle"
         android:padding="@dimen/small_padding"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="8dp" />
+        android:layout_alignParentEnd="true"/>
 
     <TableLayout
         android:id="@+id/participantTableHeader"

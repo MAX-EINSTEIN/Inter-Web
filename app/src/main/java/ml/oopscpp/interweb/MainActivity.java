@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_share) {
             return true;
         }
 
@@ -95,23 +95,20 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+        for (Fragment fragment:getSupportFragmentManager().getFragments())
+            if(fragment!=null) getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+
         if (id == R.id.nav_event) {
-            for (Fragment fragment:getSupportFragmentManager().getFragments())
-               if(fragment!=null) getSupportFragmentManager().beginTransaction().remove(fragment).commit();
             getSupportFragmentManager().beginTransaction().add(R.id.fragment,new EventFragment()).commit();
         } else if (id == R.id.nav_gallery) {
-            for (Fragment fragment:getSupportFragmentManager().getFragments())
-                if(fragment!=null) getSupportFragmentManager().beginTransaction().remove(fragment).commit();
             getSupportFragmentManager().beginTransaction().add(R.id.fragment,new GalleryFragment()).commit();
         } else if (id == R.id.nav_participants) {
-            for (Fragment fragment:getSupportFragmentManager().getFragments())
-                if(fragment!=null) getSupportFragmentManager().beginTransaction().remove(fragment).commit();
             getSupportFragmentManager().beginTransaction().add(R.id.fragment,new ParticipantFragment()).commit();
-        } else if (id == R.id.nav_winners) {
+        } else if (id == R.id.nav_hall_of_fame) {
+            getSupportFragmentManager().beginTransaction().add(R.id.fragment,new HallOfFameFragment()).commit();
+        } else if (id == R.id.nav_settings) {
 
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_broadcast) {
+        } else if (id == R.id.nav_about) {
 
         }
 

@@ -67,9 +67,7 @@ public class ParticipantFragment extends Fragment {
                 adapter = new ParticipantAdapter(getContext(), participants);
                 // Attach the adapter to a ListView
                 participantList.setAdapter(adapter);
-                if(getActivity() instanceof SelectParticipant){
-                    addOnClickListenerToListViewItem();
-                }
+                addOnClickListenerToListViewItem();
             }
 
             @Override
@@ -81,9 +79,7 @@ public class ParticipantFragment extends Fragment {
                 adapter = new ParticipantAdapter(getContext(), participants);
                 // Attach the adapter to a ListView
                 participantList.setAdapter(adapter);
-                if(getActivity() instanceof SelectParticipant){
-                    addOnClickListenerToListViewItem();
-                }
+                addOnClickListenerToListViewItem();
             }
 
             @Override
@@ -95,9 +91,7 @@ public class ParticipantFragment extends Fragment {
                 adapter = new ParticipantAdapter(getContext(), participants);
                 // Attach the adapter to a ListView
                 participantList.setAdapter(adapter);
-                if(getActivity() instanceof SelectParticipant){
-                    addOnClickListenerToListViewItem();
-                }
+                addOnClickListenerToListViewItem();
             }
 
             @Override
@@ -109,9 +103,7 @@ public class ParticipantFragment extends Fragment {
                 adapter = new ParticipantAdapter(getContext(), participants);
                 // Attach the adapter to a ListView
                 participantList.setAdapter(adapter);
-                if(getActivity() instanceof SelectParticipant){
-                    addOnClickListenerToListViewItem();
-                }
+                addOnClickListenerToListViewItem();
             }
 
             @Override
@@ -148,15 +140,30 @@ public class ParticipantFragment extends Fragment {
     }
 
     private void addOnClickListenerToListViewItem(){
-        participantList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Participant currentParticipant = adapter.getItem(position);
-                Toast.makeText(getContext(), Objects.requireNonNull(currentParticipant).getParticipantName(), Toast.LENGTH_SHORT).show();
-                SelectParticipant parent = (SelectParticipant) getActivity();
-                parent.returnResult(currentParticipant.getParticipantName(),currentParticipant.getParticipantContact());
-            }
-        });
+        if(getActivity() instanceof SelectParticipant){
+            participantList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                    Participant currentParticipant = adapter.getItem(position);
+                    Toast.makeText(getContext(), Objects.requireNonNull(currentParticipant).getParticipantName(), Toast.LENGTH_SHORT).show();
+                    SelectParticipant parent = (SelectParticipant) getActivity();
+                    parent.returnResult(currentParticipant.getParticipantName(),currentParticipant.getParticipantContact());
+                }
+            });
+        }
+        else {
+            participantList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                    Participant currentParticipant = adapter.getItem(position);
+                    Toast.makeText(getContext(), Objects.requireNonNull(currentParticipant).getParticipantName(), Toast.LENGTH_SHORT).show();
+                    Intent detail = new Intent(getContext(),DetailParticipant.class);
+                    detail.putExtra("details",currentParticipant);
+                    startActivity(detail);
+                }
+            });
+        }
+
     }
 
 }
