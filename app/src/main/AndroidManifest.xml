@@ -9,11 +9,10 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -43,7 +42,10 @@
         <activity
             android:name=".DetailParticipant"
             android:label="Participant Details"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".MainActivity" />
+        <activity android:name=".AddWinner"
+            android:label="Announce Winner"
+            android:parentActivityName=".DetailEvent"/>
     </application>
 
 </manifest>

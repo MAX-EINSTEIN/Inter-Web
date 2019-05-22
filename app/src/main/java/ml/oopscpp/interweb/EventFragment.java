@@ -41,6 +41,9 @@ public class EventFragment extends Fragment {
         // Set Toolbar's title
         getActivity().setTitle("Events");
 
+        MainActivity mainActivity = (MainActivity) getActivity();
+        mainActivity.fab.setVisibility(View.VISIBLE);
+
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_event, container, false);
 

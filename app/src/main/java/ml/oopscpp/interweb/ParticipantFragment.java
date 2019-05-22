@@ -43,6 +43,11 @@ public class ParticipantFragment extends Fragment {
         // Set Toolbar's title
         Objects.requireNonNull(getActivity()).setTitle("Participants");
 
+        if(getActivity() instanceof MainActivity){
+            MainActivity mainActivity = (MainActivity) getActivity();
+            mainActivity.fab.setVisibility(View.VISIBLE);
+        }
+
         if(getActivity() instanceof SelectParticipant){
             getActivity().setTitle("Select Participants");
         }
@@ -112,8 +117,8 @@ public class ParticipantFragment extends Fragment {
             }
         };
 
-        DatabaseReference mEventsDatabase = mDatabase.child("participants");
-        mEventsDatabase.addChildEventListener(childEventListener);
+        DatabaseReference mParticipantDatabase = mDatabase.child("participants");
+        mParticipantDatabase.addChildEventListener(childEventListener);
 
         return rootView;
     }
@@ -147,7 +152,7 @@ public class ParticipantFragment extends Fragment {
                     Participant currentParticipant = adapter.getItem(position);
                     Toast.makeText(getContext(), Objects.requireNonNull(currentParticipant).getParticipantName(), Toast.LENGTH_SHORT).show();
                     SelectParticipant parent = (SelectParticipant) getActivity();
-                    parent.returnResult(currentParticipant.getParticipantName(),currentParticipant.getParticipantContact());
+                    parent.returnResult(currentParticipant.getParticipantName(),currentParticipant.getParticipantContact(),currentParticipant.getParticipantImage());
                 }
             });
         }

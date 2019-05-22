@@ -162,7 +162,7 @@
         android:id="@+id/submitEventData"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark"
+        android:background="@color/colorPrimary"
         android:text="CREATE EVENT"
         android:textColor="@color/plain_white" />
 </LinearLayout>

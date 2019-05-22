@@ -21,6 +21,11 @@ public class Participant implements Parcelable {
         this.participantAbout = "";
     }
 
+    Participant(String image,String name){
+        this.participantImage = image;
+        this.participantAge = name;
+    }
+
     Participant(String image,String name, String contact,String affiliation,String age, String about){
         this.participantImage = image;
         this.participantName = name;

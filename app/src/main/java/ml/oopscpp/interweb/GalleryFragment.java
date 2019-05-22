@@ -9,17 +9,29 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class GalleryFragment extends Fragment {
 
@@ -28,6 +40,7 @@ public class GalleryFragment extends Fragment {
     private ListView imageList;
 
     private Uri imageUri;
+    private String imageUrl;
 
     private static final int PICK_IMAGE = 1;
 
@@ -41,6 +54,9 @@ public class GalleryFragment extends Fragment {
         // Set Toolbar's title
         getActivity().setTitle("Gallery");
 
+        MainActivity mainActivity = (MainActivity) getActivity();
+        mainActivity.fab.setVisibility(View.VISIBLE);
+
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_gallery, container, false);
 
@@ -49,13 +65,14 @@ public class GalleryFragment extends Fragment {
         imageList.setNestedScrollingEnabled(true);
 
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference mEventsDatabase = mDatabase.child("events");
+        DatabaseReference mImagesDatabase = mDatabase.child("images");
+
         ChildEventListener childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Event newEvent = dataSnapshot.getValue(Event.class);
-                if(newEvent!=null)
-                arrayOfImageUrls.add(newEvent.getEventImage());
+                String image = dataSnapshot.getValue(String.class);
+                if(image != null)
+                    arrayOfImageUrls.add(image);
                 //adapter.add(new Image Url);
                 if(getContext()!=null && arrayOfImageUrls != null)
                 adapter = new ImageAdapter(getContext(), arrayOfImageUrls);
@@ -83,7 +100,7 @@ public class GalleryFragment extends Fragment {
 
             }
         };
-        mEventsDatabase.addChildEventListener(childEventListener);
+        mImagesDatabase.addChildEventListener(childEventListener);
 
         return rootView;
     }
@@ -113,7 +130,59 @@ public class GalleryFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK && requestCode == PICK_IMAGE) {
             imageUri = data.getData();
-            Toast.makeText(getContext(),imageUri.toString(),Toast.LENGTH_SHORT).show();
+            // Uploading selected image to Firebase Storage
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+
+            StorageReference storageRef = storage.getReference();
+            Log.e("Gallery","images/"+imageUri.getLastPathSegment());
+            final StorageReference imageRef = storageRef.child("images/"+imageUri.getLastPathSegment());
+            UploadTask uploadTask = imageRef.putFile(imageUri);
+
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle unsuccessful uploads
+                    Toast.makeText(getContext(),"Sorry! Image can't be uploaded",Toast.LENGTH_SHORT).show();
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                    // ...
+                }
+            });
+
+            Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                @Override
+                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                    if (!task.isSuccessful()) {
+                        throw Objects.requireNonNull(task.getException());
+                    }
+
+                    // Continue with the task to get the download URL
+                    return imageRef.getDownloadUrl();
+                }
+            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    if (task.isSuccessful()) {
+                        Uri downloadUri = task.getResult();
+                        Toast.makeText(getContext(),"Image Url received",Toast.LENGTH_SHORT).show();
+                        imageUrl = Objects.requireNonNull(downloadUri).toString();
+                        Log.e("Gallery",imageUrl);
+                        addToFirebaseRealtimeDatabase(imageUrl);
+                    }  // Handle failures
+                    // ...
+
+                }
+            });
+
         }
+    }
+
+    private void  addToFirebaseRealtimeDatabase(String url){
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+        // Writing Image to Firebase Realtime Database
+        mDatabase.child("images").push().setValue(url);
     }
 }

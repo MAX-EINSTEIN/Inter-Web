@@ -151,6 +151,7 @@ public class NewEvent extends AppCompatActivity {
             addParticipant(data.getStringExtra("participantName"),data.getStringExtra("participantContact"));
         }
         else if(resultCode == RESULT_OK && requestCode == SELECT_PARTICIPANT){
+            Log.e("NewEvent","Here in onActivityResult");
             addParticipant(data.getStringExtra("name"),data.getStringExtra("contact"));
         }
     }
@@ -164,6 +165,7 @@ public class NewEvent extends AppCompatActivity {
     private void addParticipantsToLists(){
         Intent getResult = new Intent(NewEvent.this,SelectParticipant.class);
         startActivityForResult(getResult,SELECT_PARTICIPANT);
+        Log.e("NewEvent","Here in addParticipants to List");
     }
 
     private void submitEventData(){
@@ -187,10 +189,12 @@ public class NewEvent extends AppCompatActivity {
 
             Event newEvent = new Event(imageUrl,title.getText().toString(),date.getText().toString(),venue.getText().toString(),participants, contacts);
 
-            // Writing to Firebase Realtime Database
-
+            // Writing Event to Firebase Realtime Database
             DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
             mDatabase.child("events").child(eventId).setValue(newEvent);
+
+            // Writing Image to Firebase Realtime Database
+            mDatabase.child("images").push().setValue(imageUrl);
 
             // Returning Back to Main Activity
             Intent backToMain = new Intent(NewEvent.this,MainActivity.class);
