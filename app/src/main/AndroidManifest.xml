@@ -4,6 +4,7 @@
     package="ml.oopscpp.interweb">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -13,16 +14,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+        <activity android:name=".Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".NewEvent"
             android:label="@string/activity_new_event"
@@ -43,9 +45,10 @@
             android:name=".DetailParticipant"
             android:label="Participant Details"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".AddWinner"
+        <activity
+            android:name=".AddWinner"
             android:label="Announce Winner"
-            android:parentActivityName=".DetailEvent"/>
+            android:parentActivityName=".DetailEvent" />
     </application>
 
 </manifest>

@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -117,8 +118,12 @@ public class ParticipantFragment extends Fragment {
             }
         };
 
-        DatabaseReference mParticipantDatabase = mDatabase.child("participants");
-        mParticipantDatabase.addChildEventListener(childEventListener);
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+
+        if(auth!=null){
+            DatabaseReference mParticipantDatabase = mDatabase.child("users").child(auth.getUid()).child("participants");
+            mParticipantDatabase.addChildEventListener(childEventListener);
+        }
 
         return rootView;
     }

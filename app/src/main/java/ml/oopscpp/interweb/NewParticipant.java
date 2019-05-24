@@ -21,6 +21,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -166,8 +167,12 @@ public class NewParticipant extends AppCompatActivity {
 
     private void uploadToDatabase(Participant participant){
         // Writing to Firebase Realtime Database
-        String eventId = "participant" + participant.getParticipantContact();
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-        mDatabase.child("participants").child(eventId).setValue(participant);
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        if(auth !=null){
+            String participantId = "participant" + participant.getParticipantContact();
+            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+            DatabaseReference mParticipantsDatabase =  mDatabase.child("users").child(auth.getUid()).child("participants");
+            mParticipantsDatabase.child(participantId).setValue(participant);
+        }
     }
 }

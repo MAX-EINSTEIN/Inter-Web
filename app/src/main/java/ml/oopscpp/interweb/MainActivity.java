@@ -1,14 +1,24 @@
 package ml.oopscpp.interweb;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import com.bumptech.glide.Glide;
+import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import android.provider.Settings;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.view.GravityCompat;
@@ -19,20 +29,29 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     public FloatingActionButton fab;
+    private static boolean RUN_ONCE = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
 
         fab = findViewById(R.id.fab);
 
@@ -42,17 +61,63 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        if(!haveNetworkConnection()){
-            showDialog();
-        }
-
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        View headerLayout = navigationView.getHeaderView(0);
+        RoundedImageView userImage = headerLayout.findViewById(R.id.userImage);
+        TextView userName = headerLayout.findViewById(R.id.userName);
+        TextView userMail = headerLayout.findViewById(R.id.userMail);
+        ImageButton logoutButton = headerLayout.findViewById(R.id.logout_button);
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            if(user.getPhotoUrl()!=null)
+               Glide.with(userImage).load(user.getPhotoUrl()).into(userImage);
+            userName.setText(user.getDisplayName());
+            userMail.setText(user.getEmail());
+        } else {
+            Toast.makeText(getApplicationContext(), "Login to backup and sync your data", Toast.LENGTH_SHORT).show();
+        }
+
+
+
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(),"Logged out",Toast.LENGTH_SHORT).show();
+                new Timer().schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        AuthUI.getInstance()
+                                .signOut(getApplicationContext())
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        ((ActivityManager)getSystemService(ACTIVITY_SERVICE))
+                                                .clearApplicationUserData();
+                                        finish();
+                                    }
+                                });
+                    }
+                }, 1500);
+                
+            }
+        });
 
         if(savedInstanceState == null){
             getSupportFragmentManager().beginTransaction().add(R.id.fragment,new EventFragment()).commit();
             navigationView.setCheckedItem(R.id.nav_event);
+
+            if(RUN_ONCE)
+            {
+                checkFirstRun();
+                RUN_ONCE = false;
+            }
+
+            if(!haveNetworkConnection()){
+                showDialog();
+            }
         }
 
     }
@@ -74,14 +139,6 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        return super.onOptionsItemSelected(item);
-    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -136,13 +193,14 @@ public class MainActivity extends AppCompatActivity
                 .setPositiveButton("Connect to WIFI", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+                        Toast.makeText(getBaseContext(), "Wait till wifi is connected,\nthen press back button",
+                                Toast.LENGTH_SHORT).show();
                     }
                 })
-                .setNeutralButton("Turn on Cellular Data", new DialogInterface.OnClickListener() {
+                .setNeutralButton("Stay offline", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        startActivity(new Intent(Settings.ACTION_SETTINGS));
-                        Toast.makeText(getBaseContext(), "Please check 'Data enabled' option",
+                        Toast.makeText(getBaseContext(), "App not connected to network",
                                 Toast.LENGTH_SHORT).show();
                     }
                 })
@@ -155,8 +213,41 @@ public class MainActivity extends AppCompatActivity
         alert.show();
     }
 
-}
+    private void checkFirstRun() {
 
+        String lastUserId = "";
+
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        if(auth!=null){
+            lastUserId = auth.getUid();
+        }
+
+        final String PREFS_NAME = "MyPrefsFile";
+        final String PREF_USER_ID_KEY = "user_id";
+        final String DOES_NOT_EXIST = "no_id";
+
+        // Get saved version code
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        String savedUserId = prefs.getString(PREF_USER_ID_KEY,DOES_NOT_EXIST);
+
+        // Check for first run or upgrade
+        if (lastUserId.equals(savedUserId)) {
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+            FirebaseDatabase.getInstance().getReference().keepSynced(true);
+            return;
+
+        } else if (savedUserId.equals(DOES_NOT_EXIST)) {
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+            FirebaseDatabase.getInstance().getReference().keepSynced(true);
+            Toast.makeText(this, "Welcome", Toast.LENGTH_SHORT).show();
+        }
+
+        // Update the shared preferences with the current version code
+        prefs.edit().putString(PREF_USER_ID_KEY, lastUserId).apply();
+    }
+
+
+}
 
 
 

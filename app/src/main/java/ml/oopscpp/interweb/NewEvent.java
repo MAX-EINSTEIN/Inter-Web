@@ -19,6 +19,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -189,12 +190,20 @@ public class NewEvent extends AppCompatActivity {
 
             Event newEvent = new Event(imageUrl,title.getText().toString(),date.getText().toString(),venue.getText().toString(),participants, contacts);
 
-            // Writing Event to Firebase Realtime Database
-            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-            mDatabase.child("events").child(eventId).setValue(newEvent);
+            FirebaseAuth auth = FirebaseAuth.getInstance();
 
-            // Writing Image to Firebase Realtime Database
-            mDatabase.child("images").push().setValue(imageUrl);
+            if(auth!=null) {
+                // Writing Event to Firebase Realtime Database
+                DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+                DatabaseReference mEventsDatabase = mDatabase.child("users").child(auth.getUid()).child("events");
+                mEventsDatabase.child(eventId).setValue(newEvent);
+
+                // Writing Image to Firebase Realtime Database
+                mDatabase.child("images").push().setValue(imageUrl);
+                DatabaseReference mImagesDatabase = mDatabase.child("users").child(auth.getUid()).child("images");
+                mImagesDatabase.push().setValue(imageUrl);
+            }
+
 
             // Returning Back to Main Activity
             Intent backToMain = new Intent(NewEvent.this,MainActivity.class);

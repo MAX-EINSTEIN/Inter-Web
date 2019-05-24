@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -70,9 +71,16 @@ public class AddWinner extends AppCompatActivity {
 
     private void addToFirebaseRealtimeDatabase(Winners winner){
         // Writing to Firebase Realtime Database
-        String winnerId = winner.getName()+"_"+winner.getEventName();
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-        mDatabase.child("winners").child(winnerId).setValue(winner);
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+
+        if(auth!=null)
+        {
+            String winnerId = winner.getName()+"_"+winner.getEventName();
+            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+            DatabaseReference mWinnersDatabase = mDatabase.child("users").child(auth.getUid()).child("winners");
+            mWinnersDatabase.child(winnerId).setValue(winner);
+        }
+
     }
 
 }

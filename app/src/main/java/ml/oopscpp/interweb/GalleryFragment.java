@@ -21,6 +21,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -64,8 +65,8 @@ public class GalleryFragment extends Fragment {
         imageList = rootView.findViewById(R.id.imageList);
         imageList.setNestedScrollingEnabled(true);
 
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference mImagesDatabase = mDatabase.child("images");
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+
 
         ChildEventListener childEventListener = new ChildEventListener() {
             @Override
@@ -100,7 +101,12 @@ public class GalleryFragment extends Fragment {
 
             }
         };
-        mImagesDatabase.addChildEventListener(childEventListener);
+
+        if(auth != null){
+            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+            DatabaseReference mImagesDatabase = mDatabase.child("users").child(auth.getUid()).child("images");
+            mImagesDatabase.addChildEventListener(childEventListener);
+        }
 
         return rootView;
     }
@@ -181,8 +187,15 @@ public class GalleryFragment extends Fragment {
     }
 
     private void  addToFirebaseRealtimeDatabase(String url){
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-        // Writing Image to Firebase Realtime Database
-        mDatabase.child("images").push().setValue(url);
+
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+
+        if(auth != null){
+            // Writing Image's Url to Firebase Realtime Database
+            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+            DatabaseReference mImagesDatabase = mDatabase.child("users").child(auth.getUid()).child("images");
+            mImagesDatabase.push().setValue(url);
+        }
+
     }
 }
