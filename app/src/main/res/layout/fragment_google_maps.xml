@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mapFragmentContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".GoogleMapsFragment">
+    android:orientation="vertical" >
 
+    <TextView
+        android:id="@+id/mapSearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Hello"
+        android:layout_margin="@dimen/small_margin"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="@dimen/medium_text"
+        android:background="@drawable/event_list_background"/>
 
+</LinearLayout>
 
-</FrameLayout>

@@ -1,6 +1,7 @@
 package ml.oopscpp.interweb;
 
 import android.app.ActivityManager;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,6 +11,8 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -27,6 +30,8 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,6 +45,9 @@ import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private static final String TAG = "MainActivity";
+    private static int ERROR_DIALOG_REQUEST = 9001;
 
     public FloatingActionButton fab;
     private static boolean RUN_ONCE = true;
@@ -101,7 +109,7 @@ public class MainActivity extends AppCompatActivity
                                 });
                     }
                 }, 1500);
-                
+
             }
         });
 
@@ -157,7 +165,12 @@ public class MainActivity extends AppCompatActivity
             getSupportFragmentManager().beginTransaction().add(R.id.fragment,new ParticipantFragment()).commit();
         } else if (id == R.id.nav_hall_of_fame) {
             getSupportFragmentManager().beginTransaction().add(R.id.fragment,new HallOfFameFragment()).commit();
-        } else if (id == R.id.nav_settings) {
+        }else if( id == R.id.nav_venue){
+            if (isServicesOK()){
+                init();
+            }
+        }
+        else if (id == R.id.nav_settings) {
 
         } else if (id == R.id.nav_about) {
 
@@ -244,6 +257,35 @@ public class MainActivity extends AppCompatActivity
 
         // Update the shared preferences with the current version code
         prefs.edit().putString(PREF_USER_ID_KEY, lastUserId).apply();
+    }
+
+
+
+    private void init(){
+        for (Fragment fragment:getSupportFragmentManager().getFragments())
+            if(fragment!=null) getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.fragment,new GoogleMapsFragment()).commit();
+    }
+
+    public boolean isServicesOK(){
+        Log.e(TAG,"Checking if service required for google maps are available");
+
+        int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(MainActivity.this);
+
+        if(available == ConnectionResult.SUCCESS){
+            Log.e(TAG,"Everything is Ok");
+            return true;
+        }
+        else if(GoogleApiAvailability.getInstance().isUserResolvableError(available)){
+            Log.e(TAG, "isServicesOK: Follow these steps to enable the services");
+            Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(MainActivity.this,available,ERROR_DIALOG_REQUEST);
+            dialog.show();
+        }
+        else {
+            Toast.makeText(MainActivity.this, "You can't use google maps", Toast.LENGTH_SHORT).show();
+        }
+
+        return false;
     }
 
 
