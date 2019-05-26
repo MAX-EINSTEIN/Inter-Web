@@ -29,16 +29,18 @@
             android:height="30dp"
             android:inputType="text"
             android:maxLines="1"
+            android:hint="Enter Address or Places"
             android:background="@drawable/participant_list_background"
             android:imeOptions="actionSearch"/>
         <ImageButton
+            android:id="@+id/searchButton"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_margin="4dp"
             android:layout_alignEnd="@id/searchInput"
             android:elevation="4dp"
             android:layout_centerVertical="true"
-            android:background="@drawable/participant_list_background"
+            android:background="@android:color/transparent"
             android:src="@drawable/ic_search"/>
     </RelativeLayout>
 

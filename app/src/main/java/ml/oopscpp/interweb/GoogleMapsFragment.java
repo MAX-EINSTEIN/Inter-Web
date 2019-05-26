@@ -3,6 +3,8 @@ package ml.oopscpp.interweb;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -13,10 +15,17 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -25,13 +34,19 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 
 
-public class GoogleMapsFragment extends Fragment implements OnMapReadyCallback {
+public class GoogleMapsFragment extends Fragment implements OnMapReadyCallback{
 
     private static final String TAG = "GoogleMapsFragment";
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
@@ -41,6 +56,7 @@ public class GoogleMapsFragment extends Fragment implements OnMapReadyCallback {
     private static boolean mLocationAccessGranted = false;
 
     private GoogleMap mMap;
+    private SupportMapFragment mapFragment;
 
     public GoogleMapsFragment() {
         // Required empty public constructor
@@ -72,7 +88,25 @@ public class GoogleMapsFragment extends Fragment implements OnMapReadyCallback {
             }
         });
 
+        final EditText searchText = rootView.findViewById(R.id.searchInput);
+        searchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE
+                || event.getAction() == KeyEvent.ACTION_DOWN || event.getAction() == KeyEvent.KEYCODE_ENTER){
+                    locateAddress(searchText.getText().toString());
+                }
+                mainActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+                return false;
+            }
+        });
+
+        final ImageButton searchButton = rootView.findViewById(R.id.searchButton);
+        searchButton.setAlpha(0.2f);
+
         getLocationPermission();
+
+
         Log.e(TAG, "onCreateView: I am being created");
         return rootView;
     }
@@ -80,7 +114,7 @@ public class GoogleMapsFragment extends Fragment implements OnMapReadyCallback {
     private void initMap(){
         Log.e(TAG, "initMap: Here I am");
         FragmentManager fm = getChildFragmentManager();
-        SupportMapFragment mapFragment = (SupportMapFragment) fm.findFragmentByTag("mapFragment");
+        mapFragment = (SupportMapFragment) fm.findFragmentByTag("mapFragment");
         if (mapFragment == null) {
             mapFragment = new SupportMapFragment();
             FragmentTransaction ft = fm.beginTransaction();
@@ -122,6 +156,10 @@ public class GoogleMapsFragment extends Fragment implements OnMapReadyCallback {
             if(ContextCompat.checkSelfPermission(Objects.requireNonNull(getContext()),Manifest.permission.ACCESS_FINE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED) return;
             mMap.setMyLocationEnabled(true);
+            mMap.getUiSettings().setMapToolbarEnabled(false);
+            LinearLayout.MarginLayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.MarginLayoutParams.MATCH_PARENT,LinearLayout.MarginLayoutParams.MATCH_PARENT);
+            layoutParams.setMargins(0,0,0,80);
+            Objects.requireNonNull(mapFragment.getView()).setLayoutParams(layoutParams);
         }
     }
 
@@ -130,8 +168,8 @@ public class GoogleMapsFragment extends Fragment implements OnMapReadyCallback {
 
         FusedLocationProviderClient mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(Objects.requireNonNull(getContext()));
         try {
-            final Task location = mFusedLocationProviderClient.getLastLocation();
-            location.addOnCompleteListener(new OnCompleteListener() {
+            final Task<Location> location = mFusedLocationProviderClient.getLastLocation();
+            location.addOnCompleteListener(new OnCompleteListener<Location>() {
                 @Override
                 public void onComplete(@NonNull Task task) {
                     if(task.isSuccessful()){
@@ -170,6 +208,41 @@ public class GoogleMapsFragment extends Fragment implements OnMapReadyCallback {
     public void onStop() {
         super.onStop();
         Objects.requireNonNull(((AppCompatActivity) Objects.requireNonNull(getActivity())).getSupportActionBar()).show();
+    }
+
+    private void locateAddress(String address){
+        Log.e(TAG, "locateAddress: Locating address...");
+
+        Geocoder geocoder = new Geocoder(getContext());
+        List<Address> addressList = new ArrayList<>();
+        try {
+            addressList = geocoder.getFromLocationName(address,1);
+        }catch (IOException e){
+            Log.e(TAG, "locateAddress: IOException : "+e.getMessage());
+        }
+
+        if(addressList.size()>0){
+            Address addressSearched = addressList.get(0);
+            Log.e(TAG, "Address: " + addressSearched.toString());
+            Location locationSearched = new Location("Google Maps Search");
+            locationSearched.setLatitude(addressSearched.getLatitude());
+            locationSearched.setLongitude(addressSearched.getLongitude());
+            moveCameraTo(locationSearched);
+            dropMarkerAtLatLng(new LatLng(addressSearched.getLatitude(),addressSearched.getLongitude()),addressSearched.getFeatureName());
+        }
+    }
+
+    private void dropMarkerAtLatLng(LatLng latlng,String title){
+        MarkerOptions options = new MarkerOptions().position(latlng).title(title);
+        mMap.addMarker(options);
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                Log.e(TAG, "onMarkerClick: Here");
+                mMap.getUiSettings().setMapToolbarEnabled(true);
+                return false;
+            }
+        });
     }
 
 }
