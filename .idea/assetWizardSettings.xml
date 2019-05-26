@@ -14,9 +14,11 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="ic_logout_and_exit" />
+                            <entry key="height" value="50" />
+                            <entry key="outputName" value="ic_nav" />
                             <entry key="overrideSize" value="true" />
-                            <entry key="sourceFile" value="F:\Android_Development\Android_Projects\App Resources\ic_logout_and_exit.svg" />
+                            <entry key="sourceFile" value="F:\Android_Development\Android_Projects\App Resources\ic_nav.svg" />
+                            <entry key="width" value="50" />
                           </map>
                         </option>
                       </PersistentState>

@@ -52,6 +52,12 @@ public class MainActivity extends AppCompatActivity
     public FloatingActionButton fab;
     private static boolean RUN_ONCE = true;
 
+    public DrawerLayout getDrawer() {
+        return drawer;
+    }
+
+    private DrawerLayout drawer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,10 +66,9 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
         fab = findViewById(R.id.fab);
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -94,7 +99,7 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(),"Logged out",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"Logging out...",Toast.LENGTH_SHORT).show();
                 new Timer().schedule(new TimerTask() {
                     @Override
                     public void run() {
