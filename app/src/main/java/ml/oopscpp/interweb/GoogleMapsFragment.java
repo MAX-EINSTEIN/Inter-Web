@@ -2,12 +2,14 @@ package ml.oopscpp.interweb;
 
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
@@ -104,9 +106,6 @@ public class GoogleMapsFragment extends Fragment implements OnMapReadyCallback{
         final ImageButton searchButton = rootView.findViewById(R.id.searchButton);
         searchButton.setAlpha(0.2f);
 
-        getLocationPermission();
-
-
         Log.e(TAG, "onCreateView: I am being created");
         return rootView;
     }
@@ -126,6 +125,7 @@ public class GoogleMapsFragment extends Fragment implements OnMapReadyCallback{
     }
 
     private void getLocationPermission(){
+        Log.e(TAG, "getLocationPermission: asking for location permiussions");
         String[] permissions = {FINE_LOCATION};
         if(ContextCompat.checkSelfPermission(Objects.requireNonNull(getActivity()).getApplicationContext(),FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
             mLocationAccessGranted = true;
@@ -141,9 +141,29 @@ public class GoogleMapsFragment extends Fragment implements OnMapReadyCallback{
         mLocationAccessGranted = false;
         Log.e(TAG, "onRequestPermissionsResult: Here");
         if(requestCode == LOCATION_PERMISSION_REQUEST_CODE){
-            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            if(grantResults.length > 0 /*&& grantResults[0] == PackageManager.PERMISSION_GRANTED*/){
+                Log.e(TAG, "onRequestPermissionsResult: granted" + grantResults.length);
                 mLocationAccessGranted = true;
                 initMap();
+            }else{
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setMessage("Please provide permissions. We don't upload your location data to our severs")
+                        .setCancelable(false)
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                            }
+                        })
+                        .setNegativeButton("Quit Application", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                getActivity().finish();
+                            }
+                        });
+
+                AlertDialog alert = builder.create();
+                alert.show();
+
+                getLocationPermission();
             }
         }
     }
@@ -158,13 +178,14 @@ public class GoogleMapsFragment extends Fragment implements OnMapReadyCallback{
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMapToolbarEnabled(false);
             LinearLayout.MarginLayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.MarginLayoutParams.MATCH_PARENT,LinearLayout.MarginLayoutParams.MATCH_PARENT);
-            layoutParams.setMargins(0,0,0,80);
+            layoutParams.setMargins(0,0,0,86);
             Objects.requireNonNull(mapFragment.getView()).setLayoutParams(layoutParams);
         }
     }
 
     private  void getDeviceLocation(){
         Log.e(TAG, "getDeviceLocation: Getting device's current location");
+        if(!mLocationAccessGranted) return;
 
         FusedLocationProviderClient mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(Objects.requireNonNull(getContext()));
         try {
@@ -178,9 +199,36 @@ public class GoogleMapsFragment extends Fragment implements OnMapReadyCallback{
                         if(currentLocation != null)
                             moveCameraTo(currentLocation);
                         else{
-                            Toast.makeText(getContext(), "Turn on Location Services", Toast.LENGTH_SHORT).show();
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                            builder.setMessage("Make sure to turn on Location Services.")
+                                    .setCancelable(false)
+                                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                        }
+                                    })
+                                    .setNegativeButton("Quit Application", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            getActivity().finish();
+                                        }
+                                    });
+                            AlertDialog alert = builder.create();
+                            alert.show();
                         }
                     }else {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        builder.setMessage("Please turn on Location Services.")
+                                .setCancelable(false)
+                                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                    }
+                                })
+                                .setNegativeButton("Quit Application", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        getActivity().finish();
+                                    }
+                                });
+                        AlertDialog alert = builder.create();
+                        alert.show();
                         Log.e(TAG, "onComplete: Couldn't get devices location");
                         Toast.makeText(getContext(), "There was an error getting devices location", Toast.LENGTH_SHORT).show();
                     }
@@ -202,6 +250,9 @@ public class GoogleMapsFragment extends Fragment implements OnMapReadyCallback{
     public void onResume() {
         super.onResume();
         Objects.requireNonNull(((AppCompatActivity) Objects.requireNonNull(getActivity())).getSupportActionBar()).hide();
+
+        getLocationPermission();
+
     }
 
     @Override

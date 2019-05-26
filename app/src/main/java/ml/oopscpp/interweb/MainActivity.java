@@ -1,11 +1,13 @@
 package ml.oopscpp.interweb;
 
+import android.Manifest;
 import android.app.ActivityManager;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -24,6 +26,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -36,6 +40,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,7 +52,9 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = "MainActivity";
-    private static int ERROR_DIALOG_REQUEST = 9001;
+    private static final int ERROR_DIALOG_REQUEST = 9001;
+    private static final int ASK_NECESSARY_PERMISSIONS = 1111;
+    private static boolean permissionGranted = false;
 
     public FloatingActionButton fab;
     private static boolean RUN_ONCE = true;
@@ -99,6 +106,7 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onClick(View v) {
+                drawer.closeDrawer(GravityCompat.START);
                 Toast.makeText(getApplicationContext(),"Logging out...",Toast.LENGTH_SHORT).show();
                 new Timer().schedule(new TimerTask() {
                     @Override
@@ -133,6 +141,14 @@ public class MainActivity extends AppCompatActivity
             }
         }
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if( askForNecessaryPermissions()){
+            Log.e(TAG, "onCreate: Permission Granted.");
+        }
     }
 
     @Override
@@ -293,6 +309,28 @@ public class MainActivity extends AppCompatActivity
         return false;
     }
 
+    private boolean askForNecessaryPermissions(){
+        String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.CAMERA};
+        if(ContextCompat.checkSelfPermission(this.getApplicationContext(),permissions[0]) == PackageManager.PERMISSION_GRANTED
+        && ContextCompat.checkSelfPermission(this.getApplicationContext(),permissions[1]) == PackageManager.PERMISSION_GRANTED
+        && ContextCompat.checkSelfPermission(this.getApplicationContext(),permissions[2]) == PackageManager.PERMISSION_GRANTED){
+            permissionGranted = true;
+            return true;
+        }
+        else{
+            ActivityCompat.requestPermissions(MainActivity.this,permissions,ASK_NECESSARY_PERMISSIONS);
+        }
+        return false;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(requestCode == ASK_NECESSARY_PERMISSIONS){
+            askForNecessaryPermissions();
+        }
+    }
 
 }
 
