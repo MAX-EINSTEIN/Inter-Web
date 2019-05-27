@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+tools:context=".AccountTypeActivity">
+
+
+<LinearLayout
+    android:id="@+id/appInfo"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_centerHorizontal="true"
+    android:layout_marginStart="64dp"
+    android:layout_marginTop="32dp"
+    android:layout_marginEnd="64dp"
+    android:orientation="horizontal"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
+    <ImageView
+        android:id="@+id/appLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:scaleType="centerInside"
+        android:src="@mipmap/ic_launcher" />
+
+    <TextView
+        android:id="@+id/appName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/app_name"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="@dimen/large_text"
+        android:textStyle="bold"/>
+
+</LinearLayout>
+
+
+<LinearLayout
+    android:id="@+id/allPlans"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_centerVertical="true"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp"
+    android:orientation="vertical"
+    app:layout_constraintBottom_toTopOf="@+id/websiteUrl"
+    app:layout_constraintTop_toBottomOf="@+id/appInfo">
+
+    <LinearLayout
+        android:id="@+id/IndividualPlans"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            tools:ignore="ContentDescription,NestedWeights" >
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="4.5"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/ic_individual_free" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.5"
+                android:text="Individual (Free)"
+                android:textAlignment="center"
+                android:textSize="@dimen/medium_text"
+                android:textColor="@color/colorPrimaryDark"
+                android:textStyle="italic"/>
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:id="@+id/paid_individual_plan"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            tools:ignore="ContentDescription,NestedWeights" >
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="4.5"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/ic_individual_paid" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.5"
+                android:text="Individual (Paid)"
+                android:textAlignment="center"
+                android:textSize="@dimen/medium_text"
+                android:textColor="@color/colorPrimaryDark"
+                android:textStyle="italic"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/groupPlans"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            tools:ignore="ContentDescription,NestedWeights" >
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="4.5"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/ic_group_join_free" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.5"
+                android:text="Join group (Free)"
+                android:textAlignment="center"
+                android:textSize="@dimen/medium_text"
+                android:textColor="@color/colorPrimaryDark"
+                android:textStyle="italic"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            tools:ignore="ContentDescription,NestedWeights" >
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="4.5"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/ic_group_paid" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.5"
+                android:text="Create Group (Paid)"
+                android:textAlignment="center"
+                android:textSize="@dimen/medium_text"
+                android:textColor="@color/colorPrimaryDark"
+                android:textStyle="italic"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
+
+<TextView
+    android:id="@+id/websiteUrl"
+    android:padding = "16dp"
+    android:textColor="@android:color/black"
+    android:text="Visit app's website for details on pricing"
+    android:textAlignment="center"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -252,7 +252,6 @@ public class GoogleMapsFragment extends Fragment implements OnMapReadyCallback{
         Objects.requireNonNull(((AppCompatActivity) Objects.requireNonNull(getActivity())).getSupportActionBar()).hide();
 
         getLocationPermission();
-
     }
 
     @Override
