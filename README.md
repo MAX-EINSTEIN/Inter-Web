@@ -1,2 +1,2 @@
 # Inter-Web
-Android app for maintaining inter-school or inter-college events/competitions.
+Android app for maintaining events like a trip.
