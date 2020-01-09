@@ -1,8 +1,8 @@
 package ml.oopscpp.interweb;
 
-
 import android.Manifest;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -10,12 +10,11 @@ import android.location.Location;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -25,8 +24,6 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -40,13 +37,10 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
-
 
 public class GoogleMapsFragment extends Fragment implements OnMapReadyCallback{
 
@@ -58,7 +52,6 @@ public class GoogleMapsFragment extends Fragment implements OnMapReadyCallback{
     private static boolean mLocationAccessGranted = false;
 
     private GoogleMap mMap;
-    private SupportMapFragment mapFragment;
 
     public GoogleMapsFragment() {
         // Required empty public constructor
@@ -82,13 +75,6 @@ public class GoogleMapsFragment extends Fragment implements OnMapReadyCallback{
 
         View rootView = inflater.inflate(R.layout.fragment_google_maps, container, false);
 
-        final ImageButton button = rootView.findViewById(R.id.toggleButton);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mainActivity.getDrawer().openDrawer(GravityCompat.START);
-            }
-        });
 
         final EditText searchText = rootView.findViewById(R.id.searchInput);
         searchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -113,7 +99,7 @@ public class GoogleMapsFragment extends Fragment implements OnMapReadyCallback{
     private void initMap(){
         Log.e(TAG, "initMap: Here I am");
         FragmentManager fm = getChildFragmentManager();
-        mapFragment = (SupportMapFragment) fm.findFragmentByTag("mapFragment");
+        SupportMapFragment mapFragment = (SupportMapFragment) fm.findFragmentByTag("mapFragment");
         if (mapFragment == null) {
             mapFragment = new SupportMapFragment();
             FragmentTransaction ft = fm.beginTransaction();
@@ -147,7 +133,7 @@ public class GoogleMapsFragment extends Fragment implements OnMapReadyCallback{
                 initMap();
             }else{
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getContext()));
                 builder.setMessage("Please provide permissions. We don't upload your location data to our severs")
                         .setCancelable(false)
                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
@@ -156,7 +142,7 @@ public class GoogleMapsFragment extends Fragment implements OnMapReadyCallback{
                         })
                         .setNegativeButton("Quit Application", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                getActivity().finish();
+                                Objects.requireNonNull(getActivity()).finish();
                             }
                         });
 
@@ -177,9 +163,6 @@ public class GoogleMapsFragment extends Fragment implements OnMapReadyCallback{
                     != PackageManager.PERMISSION_GRANTED) return;
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMapToolbarEnabled(false);
-            LinearLayout.MarginLayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.MarginLayoutParams.MATCH_PARENT,LinearLayout.MarginLayoutParams.MATCH_PARENT);
-            layoutParams.setMargins(0,0,0,86);
-            Objects.requireNonNull(mapFragment.getView()).setLayoutParams(layoutParams);
         }
     }
 
@@ -199,36 +182,50 @@ public class GoogleMapsFragment extends Fragment implements OnMapReadyCallback{
                         if(currentLocation != null)
                             moveCameraTo(currentLocation);
                         else{
-                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                            String locationProviders = Settings.Secure.getString(getContext().getContentResolver(), Settings.Secure.ALLOWED_GEOLOCATION_ORIGINS);
+                            if (locationProviders == null || locationProviders.equals("")){
+                                AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getContext()));
+                                builder.setMessage("Make sure to turn on Location Services.")
+                                        .setCancelable(false)
+                                        .setPositiveButton("Turn On", new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                Intent intent= new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                                                startActivity(intent);
+                                            }
+                                        })
+                                        .setNegativeButton("Quit", new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                Objects.requireNonNull(getActivity()).finish();
+                                            }
+                                        });
+                                AlertDialog alert = builder.create();
+                                alert.show();
+                            }
+                            Toast.makeText(getContext(), "Turn on Location services then click on my location button on top right", Toast.LENGTH_LONG).show();
+                        }
+                    }else {
+
+                        String locationProviders = Settings.Secure.getString(getContext().getContentResolver(), Settings.Secure.ALLOWED_GEOLOCATION_ORIGINS);
+                        if (locationProviders == null || locationProviders.equals("")){
+                            AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getContext()));
                             builder.setMessage("Make sure to turn on Location Services.")
                                     .setCancelable(false)
-                                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                    .setPositiveButton("Turn On", new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int id) {
+                                            Intent intent= new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                                            startActivity(intent);
                                         }
                                     })
-                                    .setNegativeButton("Quit Application", new DialogInterface.OnClickListener() {
+                                    .setNegativeButton("Quit", new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int id) {
-                                            getActivity().finish();
+                                            Objects.requireNonNull(getActivity()).finish();
                                         }
                                     });
                             AlertDialog alert = builder.create();
                             alert.show();
                         }
-                    }else {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                        builder.setMessage("Please turn on Location Services.")
-                                .setCancelable(false)
-                                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                    }
-                                })
-                                .setNegativeButton("Quit Application", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        getActivity().finish();
-                                    }
-                                });
-                        AlertDialog alert = builder.create();
-                        alert.show();
+                        Toast.makeText(getContext(), "Turn on Location services then click on my location button on top right", Toast.LENGTH_LONG).show();
+
                         Log.e(TAG, "onComplete: Couldn't get devices location");
                         Toast.makeText(getContext(), "There was an error getting devices location", Toast.LENGTH_SHORT).show();
                     }
@@ -249,16 +246,9 @@ public class GoogleMapsFragment extends Fragment implements OnMapReadyCallback{
     @Override
     public void onResume() {
         super.onResume();
-        Objects.requireNonNull(((AppCompatActivity) Objects.requireNonNull(getActivity())).getSupportActionBar()).hide();
-
         getLocationPermission();
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        Objects.requireNonNull(((AppCompatActivity) Objects.requireNonNull(getActivity())).getSupportActionBar()).show();
-    }
 
     private void locateAddress(String address){
         Log.e(TAG, "locateAddress: Locating address...");

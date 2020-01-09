@@ -11,19 +11,22 @@ import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+
 import com.bumptech.glide.Glide;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import android.provider.Settings;
+
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
@@ -40,13 +43,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Timer;
 import java.util.TimerTask;
-
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -92,8 +93,8 @@ public class MainActivity extends AppCompatActivity
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
-            if(user.getPhotoUrl()!=null)
-               Glide.with(userImage).load(user.getPhotoUrl()).into(userImage);
+            if (user.getPhotoUrl() != null)
+                Glide.with(userImage).load(user.getPhotoUrl()).into(userImage);
             userName.setText(user.getDisplayName());
             userMail.setText(user.getEmail());
         } else {
@@ -101,13 +102,12 @@ public class MainActivity extends AppCompatActivity
         }
 
 
-
         logoutButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 drawer.closeDrawer(GravityCompat.START);
-                Toast.makeText(getApplicationContext(),"Logging out...",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Logging out...", Toast.LENGTH_SHORT).show();
                 new Timer().schedule(new TimerTask() {
                     @Override
                     public void run() {
@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity
                                 .signOut(getApplicationContext())
                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                                     public void onComplete(@NonNull Task<Void> task) {
-                                        ((ActivityManager)getSystemService(ACTIVITY_SERVICE))
+                                        ((ActivityManager) getSystemService(ACTIVITY_SERVICE))
                                                 .clearApplicationUserData();
                                         finish();
                                     }
@@ -126,17 +126,16 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        if(savedInstanceState == null){
-            getSupportFragmentManager().beginTransaction().add(R.id.fragment,new EventFragment()).commit();
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction().add(R.id.fragment, new EventFragment()).commit();
             navigationView.setCheckedItem(R.id.nav_event);
 
-            if(RUN_ONCE)
-            {
+            if (RUN_ONCE) {
                 checkFirstRun();
                 RUN_ONCE = false;
             }
 
-            if(!haveNetworkConnection()){
+            if (!haveNetworkConnection()) {
                 showDialog();
             }
         }
@@ -146,14 +145,14 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        if( askForNecessaryPermissions()){
+        if (askForNecessaryPermissions()) {
             Log.e(TAG, "onCreate: Permission Granted.");
         }
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = getDrawer();
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -175,23 +174,23 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        for (Fragment fragment:getSupportFragmentManager().getFragments())
-            if(fragment!=null) getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+        for (Fragment fragment : getSupportFragmentManager().getFragments())
+            if (fragment != null)
+                getSupportFragmentManager().beginTransaction().remove(fragment).commit();
 
         if (id == R.id.nav_event) {
-            getSupportFragmentManager().beginTransaction().add(R.id.fragment,new EventFragment()).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.fragment, new EventFragment()).commit();
         } else if (id == R.id.nav_gallery) {
-            getSupportFragmentManager().beginTransaction().add(R.id.fragment,new GalleryFragment()).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.fragment, new GalleryFragment()).commit();
         } else if (id == R.id.nav_participants) {
-            getSupportFragmentManager().beginTransaction().add(R.id.fragment,new ParticipantFragment()).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.fragment, new ParticipantFragment()).commit();
         } else if (id == R.id.nav_hall_of_fame) {
-            getSupportFragmentManager().beginTransaction().add(R.id.fragment,new HallOfFameFragment()).commit();
-        }else if( id == R.id.nav_venue){
-            if (isServicesOK()){
+            getSupportFragmentManager().beginTransaction().add(R.id.fragment, new HallOfFameFragment()).commit();
+        } else if (id == R.id.nav_venue) {
+            if (isServicesOK()) {
                 init();
             }
-        }
-        else if (id == R.id.nav_settings) {
+        } else if (id == R.id.nav_settings) {
 
         } else if (id == R.id.nav_about) {
 
@@ -219,8 +218,7 @@ public class MainActivity extends AppCompatActivity
         return haveConnectedWifi || haveConnectedMobile;
     }
 
-    private void showDialog()
-    {
+    private void showDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Connect to wifi (or turn on cellular data) or quit")
                 .setCancelable(false)
@@ -252,7 +250,7 @@ public class MainActivity extends AppCompatActivity
         String lastUserId = "";
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
-        if(auth!=null){
+        if (auth != null) {
             lastUserId = auth.getUid();
         }
 
@@ -262,7 +260,7 @@ public class MainActivity extends AppCompatActivity
 
         // Get saved version code
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        String savedUserId = prefs.getString(PREF_USER_ID_KEY,DOES_NOT_EXIST);
+        String savedUserId = prefs.getString(PREF_USER_ID_KEY, DOES_NOT_EXIST);
 
         // Check for first run or upgrade
         if (lastUserId.equals(savedUserId)) {
@@ -281,56 +279,54 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-
-    private void init(){
-        for (Fragment fragment:getSupportFragmentManager().getFragments())
-            if(fragment!=null) getSupportFragmentManager().beginTransaction().remove(fragment).commit();
-        getSupportFragmentManager().beginTransaction().add(R.id.fragment,new GoogleMapsFragment()).commit();
+    private void init() {
+        for (Fragment fragment : getSupportFragmentManager().getFragments())
+            if (fragment != null)
+                getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.fragment, new GoogleMapsFragment()).commit();
     }
 
-    public boolean isServicesOK(){
-        Log.e(TAG,"Checking if service required for google maps are available");
+    public boolean isServicesOK() {
+        Log.e(TAG, "Checking if service required for google maps are available");
 
         int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(MainActivity.this);
 
-        if(available == ConnectionResult.SUCCESS){
-            Log.e(TAG,"Everything is Ok");
+        if (available == ConnectionResult.SUCCESS) {
+            Log.e(TAG, "Everything is Ok");
             return true;
-        }
-        else if(GoogleApiAvailability.getInstance().isUserResolvableError(available)){
+        } else if (GoogleApiAvailability.getInstance().isUserResolvableError(available)) {
             Log.e(TAG, "isServicesOK: Follow these steps to enable the services");
-            Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(MainActivity.this,available,ERROR_DIALOG_REQUEST);
+            Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(MainActivity.this, available, ERROR_DIALOG_REQUEST);
             dialog.show();
-        }
-        else {
+        } else {
             Toast.makeText(MainActivity.this, "You can't use google maps", Toast.LENGTH_SHORT).show();
         }
 
         return false;
     }
 
-    private boolean askForNecessaryPermissions(){
+    private boolean askForNecessaryPermissions() {
         String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.CAMERA};
-        if(ContextCompat.checkSelfPermission(this.getApplicationContext(),permissions[0]) == PackageManager.PERMISSION_GRANTED
-        && ContextCompat.checkSelfPermission(this.getApplicationContext(),permissions[1]) == PackageManager.PERMISSION_GRANTED
-        && ContextCompat.checkSelfPermission(this.getApplicationContext(),permissions[2]) == PackageManager.PERMISSION_GRANTED){
+        if (ContextCompat.checkSelfPermission(this.getApplicationContext(), permissions[0]) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(this.getApplicationContext(), permissions[1]) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(this.getApplicationContext(), permissions[2]) == PackageManager.PERMISSION_GRANTED) {
             permissionGranted = true;
             return true;
-        }
-        else{
-            ActivityCompat.requestPermissions(MainActivity.this,permissions,ASK_NECESSARY_PERMISSIONS);
+        } else {
+            ActivityCompat.requestPermissions(MainActivity.this, permissions, ASK_NECESSARY_PERMISSIONS);
         }
         return false;
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if(requestCode == ASK_NECESSARY_PERMISSIONS){
+        if (requestCode == ASK_NECESSARY_PERMISSIONS) {
             askForNecessaryPermissions();
         }
     }
+
 
 }
 

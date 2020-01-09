@@ -17,6 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
+        <activity android:name=".AccountHandling"></activity>
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -25,7 +26,8 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDNE1gQmXqkidOFwWU1WglqJMvDYvDmGZU" />
 
-        <activity android:name=".AccountTypeActivity"
+        <activity
+            android:name=".AccountTypeActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -34,9 +36,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Login"
+        <activity
+            android:name=".Login"
             android:label="Login"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"

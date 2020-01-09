@@ -46,7 +46,6 @@ public class HallOfFameFragment extends Fragment {
 
         eventWinners = new ArrayList<>();
         winnersList = rootView.findViewById(R.id.winnersList);
-        winnersList.setNestedScrollingEnabled(true);
 
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
 

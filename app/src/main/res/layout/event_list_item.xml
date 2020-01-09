@@ -2,41 +2,40 @@
 
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/eventCard"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/event_list_background"
-    android:elevation="8dp"
-    android:layout_marginLeft="8dp"
-    android:layout_marginRight="8dp">
+    android:paddingBottom="@dimen/small_padding">
 
     <ImageView
-        android:id="@+id/participantImage"
-        android:layout_width="116dp"
-        android:layout_height="116dp"
-        android:layout_centerVertical="true"
+        android:id="@+id/eventImage"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
         android:scaleType="centerCrop"
         android:adjustViewBounds="true"
-        android:padding="@dimen/small_padding"
         android:contentDescription="@string/event_image_content_description" />
 
     <TextView
-        android:id="@+id/participantName"
+        android:id="@+id/eventName"
         style="@style/TextAppearance.AppCompat.Subhead"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/participantImage"
-        android:padding="@dimen/small_padding"
-        android:textSize="@dimen/large_text"/>
+        android:layout_below="@id/eventImage"
+        android:padding="4dp"
+        android:textSize="@dimen/large_text"
+        android:textFontWeight="500"
+        tools:targetApi="p" />
 
     <TextView
-        android:id="@+id/participantContact"
+        android:id="@+id/eventDate"
         style="@style/TextAppearance.AppCompat.Subhead"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/participantImage"
-        android:layout_below="@id/participantName"
-        android:padding="@dimen/small_padding"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/eventName"
+        android:padding="2dp"
         android:textColor="?android:textColorSecondary"/>
 
     <TextView
@@ -44,9 +43,9 @@
         style="@style/TextAppearance.AppCompat.Subhead"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/participantName"
+        android:layout_below="@id/eventName"
         android:layout_alignParentEnd="true"
-        android:padding="@dimen/small_padding"
+        android:padding="2dp"
         android:textColor="?android:textColorSecondary"/>
 
 </RelativeLayout>

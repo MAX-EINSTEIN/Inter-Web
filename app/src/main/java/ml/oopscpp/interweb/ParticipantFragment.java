@@ -58,7 +58,6 @@ public class ParticipantFragment extends Fragment {
 
         participants = new ArrayList<>();
         participantList  = rootView.findViewById(R.id.participantList);
-        participantList.setNestedScrollingEnabled(true);
 
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
 

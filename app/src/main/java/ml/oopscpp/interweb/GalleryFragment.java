@@ -63,7 +63,6 @@ public class GalleryFragment extends Fragment {
 
         arrayOfImageUrls = new ArrayList<>();
         imageList = rootView.findViewById(R.id.imageList);
-        imageList.setNestedScrollingEnabled(true);
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
 

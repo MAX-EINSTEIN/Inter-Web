@@ -2,6 +2,7 @@ package ml.oopscpp.interweb;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
@@ -204,6 +205,12 @@ public class NewEvent extends AppCompatActivity {
                 mImagesDatabase.push().setValue(imageUrl);
             }
 
+//            // Showing notification to user
+//            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "Inter Web")
+//                    .setSmallIcon(R.drawable.ic_announcement)
+//                    .setContentTitle("New Event")
+//                    .setContentText("")
+//                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
             // Returning Back to Main Activity
             Intent backToMain = new Intent(NewEvent.this,MainActivity.class);

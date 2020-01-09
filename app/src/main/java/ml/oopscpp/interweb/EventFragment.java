@@ -2,45 +2,38 @@ package ml.oopscpp.interweb;
 
 import android.content.Intent;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.Toast;
-
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
 import java.util.ArrayList;
+import java.util.Objects;
 
 
-public class EventFragment extends Fragment {
+public class EventFragment extends Fragment implements EventAdapter.ListItemClickListener{
 
-    EventAdapter adapter;
-    ArrayList<Event> arrayOfEvents;
-    ListView listView;
+    private EventAdapter adapter;
+    private ArrayList<Event> arrayOfEvents;
+    private RecyclerView recyclerView;
+    private final EventFragment self = this;
 
     public EventFragment() {
         // Required empty public constructor
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Set Toolbar's title
-        getActivity().setTitle("Events");
+        Objects.requireNonNull(getActivity()).setTitle("Events");
 
         MainActivity mainActivity = (MainActivity) getActivity();
         mainActivity.fab.setVisibility(View.VISIBLE);
@@ -48,94 +41,43 @@ public class EventFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_event, container, false);
 
+        recyclerView = rootView.findViewById(R.id.eventList);
+        recyclerView.addItemDecoration(new DividerItemDecoration(Objects.requireNonNull(getContext()),
+                DividerItemDecoration.VERTICAL));
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
+
         arrayOfEvents = new ArrayList<>();
-        listView = rootView.findViewById(R.id.eventList);
-        listView.setHeaderDividersEnabled(true);
-        listView.setFooterDividersEnabled(true);
-        listView.setNestedScrollingEnabled(true);
 
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+        EventViewModel viewModel = ViewModelProviders.of(this).get(EventViewModel.class);
+        LiveData<DataSnapshot> liveData = viewModel.getDataSnapshotLiveData();
 
-        ChildEventListener childEventListener = new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Log.e("Main",dataSnapshot.getValue(Event.class).toString());
-                Event newEvent = dataSnapshot.getValue(Event.class);
-                if(newEvent!=null)
-                arrayOfEvents.add(newEvent);
-                //adapter.add(newEvent);
-                if(arrayOfEvents !=null && getContext()!=null)
-                adapter = new EventAdapter(getContext(), arrayOfEvents);
-                // Attach the adapter to a ListView
-                listView.setAdapter(adapter);
-                addOnClickListenerToListViewItem();
-            }
+
+        liveData.observe(this, new Observer<DataSnapshot>() {
 
             @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Event newEvent = dataSnapshot.getValue(Event.class);
-                if(newEvent!=null)
-                arrayOfEvents.add(newEvent);
-                //adapter.add(newEvent);
-                if(arrayOfEvents !=null && getContext()!=null)
-                adapter = new EventAdapter(getContext(), arrayOfEvents);
-                // Attach the adapter to a ListView
-                listView.setAdapter(adapter);
-                addOnClickListenerToListViewItem();
-            }
+            public void onChanged(DataSnapshot dataSnapshot) {
+                if(dataSnapshot!=null){
+                    Event newEvent = dataSnapshot.getValue(Event.class);
 
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                Event newEvent = dataSnapshot.getValue(Event.class);
-                if(newEvent!=null)
-                arrayOfEvents.add(newEvent);
-                //adapter.add(newEvent);
-                if(arrayOfEvents !=null && getContext()!=null)
-                adapter = new EventAdapter(getContext(), arrayOfEvents);
-                // Attach the adapter to a ListView
-                listView.setAdapter(adapter);
-                addOnClickListenerToListViewItem();
-            }
+                    for (Event val:arrayOfEvents) {
+                        if(newEvent!=null && newEvent.getEventTitle().equals(val.getEventTitle()))
+                            arrayOfEvents.remove(val);
+                    }
 
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Event newEvent = dataSnapshot.getValue(Event.class);
-                if(newEvent!=null)
-                arrayOfEvents.add(newEvent);
-                //adapter.add(newEvent);
-                if(arrayOfEvents !=null && getContext()!=null)
-                adapter = new EventAdapter(getContext(), arrayOfEvents);
-                // Attach the adapter to a ListView
-                listView.setAdapter(adapter);
-                addOnClickListenerToListViewItem();
-            }
+                    if(newEvent!=null)
+                        arrayOfEvents.add(newEvent);
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                    if(arrayOfEvents != null)
+                        adapter = new EventAdapter(arrayOfEvents, self);
 
-            }
-        };
-
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-
-        if(auth!=null){
-            DatabaseReference mEventsDatabase = mDatabase.child("users").child(auth.getUid()).child("events");
-            mEventsDatabase.addChildEventListener(childEventListener);
-        }
-
-        return rootView;
-    }
-
-    private void addOnClickListenerToListViewItem(){
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Intent detailEventLauncher = new Intent(getContext(), DetailEvent.class);
-                Event currentEvent = adapter.getItem(position);
-                detailEventLauncher.putExtra("event",currentEvent);
-                startActivity(detailEventLauncher);
+                    recyclerView.setAdapter(adapter);
+                }
             }
         });
+
+        return rootView;
     }
 
     @Override
@@ -144,6 +86,7 @@ public class EventFragment extends Fragment {
         super.onResume();
 
         MainActivity mainActivity = (MainActivity)getActivity();
+        if(mainActivity!=null)
         mainActivity.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -151,7 +94,15 @@ public class EventFragment extends Fragment {
                 startActivity(newEventActivity);
             }
         });
+
+        arrayOfEvents.clear();
     }
 
-
+    @Override
+    public void onListItemClick(int clickedItemIndex){
+        Intent detailEventLauncher = new Intent(getContext(), DetailEvent.class);
+        Event currentEvent = arrayOfEvents.get(clickedItemIndex);
+        detailEventLauncher.putExtra("event",currentEvent);
+        startActivity(detailEventLauncher);
+    }
 }
