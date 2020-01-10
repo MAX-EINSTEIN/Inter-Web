@@ -1,60 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".EventFragment">
 
-    <TextView
-        android:id="@+id/upcomingEventsHeading"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/small_padding"
-        android:text="@string/upcoming_events"
-        android:textColor="?android:textColorSecondary"
-        android:textStyle="bold|italic"
-        android:textSize="@dimen/medium_text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:scrollbars="none">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/eventList"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="none"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/upcomingEventsHeading" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/favoriteEventsHeading"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/small_padding"
-        android:text="@string/favorite_events"
-        android:textColor="?android:textColorSecondary"
-        android:textStyle="bold|italic"
-        android:textSize="@dimen/medium_text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/eventList" />
+            <LinearLayout
+                android:id="@+id/upcomingEventsGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
+                <TextView
+                    android:id="@+id/upcomingEventsHeading"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/upcoming_events"
+                    android:padding="4dp"
+                    android:textColor="?android:colorPrimaryDark"
+                    android:textStyle="bold|italic"
+                    android:textSize="@dimen/medium_text"
+                    android:paddingStart="8dp"
+                    tools:ignore="RtlSymmetry" />
 
-    <TextView
-        android:id="@+id/pastEventsHeading"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/small_padding"
-        android:text="@string/past_events"
-        android:textColor="?android:textColorSecondary"
-        android:textStyle="bold|italic"
-        android:textSize="@dimen/medium_text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/favoriteEventsHeading" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/upcomingEventsList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none" />
+
+            </LinearLayout>
 
 
+            <LinearLayout
+                android:id="@+id/favoriteEventsGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/favoriteEventsHeading"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/favorite_events"
+                    android:padding="4dp"
+                    android:textColor="?android:colorPrimaryDark"
+                    android:textStyle="bold|italic"
+                    android:textSize="@dimen/medium_text"
+                    android:paddingStart="8dp"
+                    tools:ignore="RtlSymmetry" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/favoriteEventsList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/pastEventsGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/pastEventsHeading"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/past_events"
+                    android:padding="4dp"
+                    android:textColor="?android:colorPrimaryDark"
+                    android:textStyle="bold|italic"
+                    android:textSize="@dimen/medium_text"
+                    android:paddingStart="8dp"
+                    tools:ignore="RtlSymmetry" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/pastEventsList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

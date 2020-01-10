@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import com.google.firebase.database.DataSnapshot;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Objects;
@@ -27,11 +28,19 @@ public class EventFragment extends Fragment
 
     private static final String LOG_TAG = "EventFragment";
 
-    private EventAdapter mEventAdapter;
-    private ArrayList<Event> mEvents;
-    private RecyclerView mEventsList;
+    private ArrayList<Event> mUpcomingEvents = new ArrayList<>();
+    private ArrayList<String> mUpcomingEventKeys = new ArrayList<>();
+    private RecyclerView mUpcomingEventsList;
+    private EventAdapter mUpcomingEventsAdapter;
+    private ArrayList<Event> mFavoriteEvents = new ArrayList<>();
+    private ArrayList<String> mFavoriteEventKeys = new ArrayList<>();
+    private RecyclerView mFavoriteEventsList;
+    private EventAdapter mFavoriteEventsAdapter;
+    private ArrayList<Event> mPastEvents = new ArrayList<>();
+    private ArrayList<String> mPastEventKeys = new ArrayList<>();
+    private RecyclerView mPastEventsList;
+    private EventAdapter mPastEventsAdapter;
     private final EventFragment self = this;
-    private ArrayList<String> mKeys = new ArrayList<>();
 
     public EventFragment() {
         // Required empty public constructor
@@ -52,16 +61,20 @@ public class EventFragment extends Fragment
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_event, container, false);
 
-        mEventsList = rootView.findViewById(R.id.eventList);
+        mUpcomingEventsList = rootView.findViewById(R.id.upcomingEventsList);
+        LinearLayoutManager upcomingEventsLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        mUpcomingEventsList.setLayoutManager(upcomingEventsLayoutManager);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        mEventsList.setLayoutManager(layoutManager);
+        mFavoriteEventsList = rootView.findViewById(R.id.favoriteEventsList);
+        LinearLayoutManager favoriteEventsLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        mFavoriteEventsList.setLayoutManager(favoriteEventsLayoutManager);
 
-        mEvents = new ArrayList<>();
+        mPastEventsList = rootView.findViewById(R.id.pastEventsList);
+        LinearLayoutManager pastEventsLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        mPastEventsList.setLayoutManager(pastEventsLayoutManager);
 
         EventViewModel viewModel = ViewModelProviders.of(this).get(EventViewModel.class);
         LiveData<DataSnapshot> liveData = viewModel.getDataSnapshotLiveData();
-
 
         liveData.observe(this, new Observer<DataSnapshot>() {
 
@@ -70,23 +83,67 @@ public class EventFragment extends Fragment
                 if(dataSnapshot!=null){
                     Event newEvent = dataSnapshot.getValue(Event.class);
 
+                    @SuppressLint("SimpleDateFormat")
+                    SimpleDateFormat formatter = new SimpleDateFormat("dd MMM, yyyy");
+                    Date Today = Calendar.getInstance().getTime();
+                    Date eventDate = new Date();
+                    try {
+                        assert newEvent != null;
+                        eventDate = formatter.parse(newEvent.getEventDate());
+                    }catch (Exception e){
+                        Log.e(LOG_TAG, Objects.requireNonNull(e.getMessage()));
+                    }
+
                     String key = dataSnapshot.getKey();
 
-                    if(mKeys.contains(key)){
-                        int index = mKeys.indexOf(key);
-                        mEvents.set(index, newEvent);
+                    if(Today.compareTo(eventDate)>0){
+
+                        if(mPastEventKeys.contains(key)){
+                            int index = mPastEventKeys.indexOf(key);
+                            mPastEvents.set(index, newEvent);
+                        }else{
+                            mPastEventKeys.add(key);
+                            mPastEvents.add(newEvent);
+                        }
+
+                        if(mPastEvents != null){
+                            sortEventDataAndKeys(mPastEvents, mPastEventKeys);
+                            mPastEventsAdapter = new EventAdapter(mPastEvents, self);
+                        }
+
+                        mPastEventsList.setAdapter(mPastEventsAdapter);
                     }else{
-                        mKeys.add(key);
-                        if(newEvent!=null)
-                            mEvents.add(newEvent);
+
+                        if(mUpcomingEventKeys.contains(key)){
+                            int index = mUpcomingEventKeys.indexOf(key);
+                            mUpcomingEvents.set(index, newEvent);
+                        }else{
+                            mUpcomingEventKeys.add(key);
+                            mUpcomingEvents.add(newEvent);
+                        }
+
+                        if(mUpcomingEvents != null){
+                            sortEventDataAndKeys(mUpcomingEvents, mUpcomingEventKeys);
+                            mUpcomingEventsAdapter = new EventAdapter(mUpcomingEvents, self);
+                        }
+
+                        mUpcomingEventsList.setAdapter(mUpcomingEventsAdapter);
                     }
 
-                    if(mEvents != null){
-                        sortEventDataAndKeys();
-                        mEventAdapter = new EventAdapter(mEvents, self);
+                    if(mFavoriteEventKeys.contains(key)){
+                        int index = mFavoriteEventKeys.indexOf(key);
+                        mFavoriteEvents.set(index, newEvent);
+                    }else{
+                        mFavoriteEventKeys.add(key);
+                        mFavoriteEvents.add(newEvent);
                     }
 
-                    mEventsList.setAdapter(mEventAdapter);
+                    if(mFavoriteEvents != null){
+                        sortEventDataAndKeys(mFavoriteEvents, mFavoriteEventKeys);
+                        mFavoriteEventsAdapter = new EventAdapter(mFavoriteEvents, self);
+                    }
+
+                    mFavoriteEventsList.setAdapter(mFavoriteEventsAdapter);
                 }
             }
         });
@@ -114,7 +171,7 @@ public class EventFragment extends Fragment
     @Override
     public void onListItemClick(int clickedItemIndex){
         Intent detailEventLauncher = new Intent(getContext(), DetailEvent.class);
-        Event currentEvent = mEvents.get(clickedItemIndex);
+        Event currentEvent = mUpcomingEvents.get(clickedItemIndex);
         detailEventLauncher.putExtra("event",currentEvent);
         startActivity(detailEventLauncher);
     }
@@ -137,12 +194,12 @@ public class EventFragment extends Fragment
         return compareCode;
     }
 
-    private void sortEventDataAndKeys(){
-        for(int i=0; i<mEvents.size()-1; i++){
-            for(int j=0; j<mEvents.size()-i-1;j++){
-                if(compareEventsByDate(mEvents.get(j), mEvents.get(j+1))<0){
-                    Collections.swap(mEvents, j, j+1);
-                    Collections.swap(mKeys, j, j+1);
+    private void sortEventDataAndKeys(ArrayList<Event> eventList, ArrayList<String> keyList){
+        for(int i = 0; i< eventList.size()-1; i++){
+            for(int j = 0; j< eventList.size()-i-1; j++){
+                if(compareEventsByDate(eventList.get(j), eventList.get(j+1))<0){
+                    Collections.swap(eventList, j, j+1);
+                    Collections.swap(keyList, j, j+1);
                 }
             }
         }
