@@ -1,7 +1,6 @@
 package ml.oopscpp.interweb;
 
 import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
@@ -19,9 +18,9 @@ public class FirebaseQueryLiveData extends LiveData<DataSnapshot>{
     private final Query query;
     private final MyChildEventListener childEventListener = new MyChildEventListener();
 
-//    public FirebaseQueryLiveData(Query query) {
-//        this.query = query;
-//    }
+    public FirebaseQueryLiveData(Query query) {
+        this.query = query;
+    }
 
     FirebaseQueryLiveData(DatabaseReference ref) {
         this.query = ref;

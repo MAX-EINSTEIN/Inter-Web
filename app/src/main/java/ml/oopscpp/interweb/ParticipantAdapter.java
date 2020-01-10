@@ -8,38 +8,60 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
 
-public class ParticipantAdapter extends ArrayAdapter<Participant>{
+public class ParticipantAdapter extends RecyclerView.Adapter<ParticipantAdapter.ParticipantViewHolder> {
 
-    public ParticipantAdapter(Context context, ArrayList<Participant> participants){
-        super(context,0,participants);
+    private ArrayList<Participant> mParticipants;
+
+    ParticipantAdapter(ArrayList<Participant> participantsList){
+        mParticipants = participantsList;
+    }
+
+    @NonNull
+    @Override
+    public ParticipantViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        Context context = parent.getContext();
+        int LayoutIdForListItem = R.layout.participant_list_item;
+        LayoutInflater inflater = LayoutInflater.from(context);
+        final boolean shouldAttachToParentImmediately = false;
+
+        View view = inflater.inflate(LayoutIdForListItem, parent, shouldAttachToParentImmediately);
+
+        return new ParticipantViewHolder(view);
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public void onBindViewHolder(@NonNull ParticipantViewHolder holder, int position) {
+        Glide.with(holder.image).load(mParticipants.get(position).getParticipantImage()).into(holder.image);
+        holder.name.setText(mParticipants.get(position).getParticipantName());
+        holder.contact.setText(mParticipants.get(position).getParticipantContact());
+    }
 
-        // Check if an existing view is being reused, otherwise inflate the view
-        if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.participant_list_item, parent, false);
+    @Override
+    public int getItemCount() {
+        return mParticipants.size();
+    }
+
+    public class ParticipantViewHolder extends RecyclerView.ViewHolder{
+
+        private ImageView image;
+        private TextView name;
+        private TextView contact;
+
+        public ParticipantViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            image = itemView.findViewById(R.id.participantImage);
+            name = itemView.findViewById(R.id.participantName);
+            contact = itemView.findViewById(R.id.participantContact);
         }
-
-        // Get the data item for this position
-        Participant participant = getItem(position);
-
-        ImageView image = convertView.findViewById(R.id.participantImage);
-        TextView name = convertView.findViewById(R.id.participantName);
-        TextView contact = convertView.findViewById(R.id.participantContact);
-
-        Glide.with(image).load(participant.getParticipantImage()).into(image);
-        name.setText(participant.getParticipantName());
-        contact.setText(participant.getParticipantContact());
-
-        // Return the completed view to render on screen
-        return convertView;
     }
 
 }

@@ -7,8 +7,7 @@
     android:layout_height="260dp"
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
-    android:background="@drawable/event_list_background"
-    android:elevation="16dp"
+    android:layout_marginBottom="@dimen/small_margin"
     android:orientation="vertical"
     android:visibility="visible">
 

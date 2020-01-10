@@ -1,33 +1,33 @@
 package ml.oopscpp.interweb;
 
-import android.content.Context;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
-import com.bumptech.glide.Glide;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
+
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class HallOfFameFragment extends Fragment {
 
-    private ListView winnersList;
-    private WinnerAdapter adapter;
-    private ArrayList<Winners> eventWinners;
+    private RecyclerView mWinnersList;
+    private WinnerAdapter mWinnerAdapter;
+    private ArrayList<Winner> mEventWinners;
+    private ArrayList<String> mKeys;
 
     public HallOfFameFragment() {
         // Required empty public constructor
@@ -44,150 +44,43 @@ public class HallOfFameFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_hall_of_fame, container, false);
 
-        eventWinners = new ArrayList<>();
-        winnersList = rootView.findViewById(R.id.winnersList);
+        mEventWinners = new ArrayList<>();
+        mKeys = new ArrayList<>();
 
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+        mWinnersList = rootView.findViewById(R.id.winnersList);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        mWinnersList.setLayoutManager(layoutManager);
 
-        ChildEventListener childEventListener = new ChildEventListener() {
+        WinnerViewModel viewModel = ViewModelProviders.of(this).get(WinnerViewModel.class);
+        LiveData<DataSnapshot> liveData = viewModel.getDataSnapshotLiveData();
+
+        liveData.observe(this, new Observer<DataSnapshot>() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Log.e("Hall Of Fame",dataSnapshot.getValue(Winners.class).toString());
-                Winners winner = dataSnapshot.getValue(Winners.class);
-                if(winner != null)
-                   eventWinners.add(winner);
-                if(eventWinners!=null && getContext() != null)
-                    adapter = new WinnerAdapter(getContext(),eventWinners);
+            public void onChanged(DataSnapshot dataSnapshot) {
+                Log.e("Hall Of Fame",dataSnapshot.getValue(Winner.class).toString());
+                Winner newWinner = dataSnapshot.getValue(Winner.class);
+
+                String key = dataSnapshot.getKey();
+
+                if(mKeys.contains(key)){
+                    int index = mKeys.indexOf(key);
+                    mEventWinners.set(index, newWinner);
+                }else{
+                    mKeys.add(key);
+                    if(newWinner != null)
+                        mEventWinners.add(newWinner);
+                }
+
+                if(mEventWinners!=null){
+                    mWinnerAdapter = new WinnerAdapter(mEventWinners);
+                }
                 // Attach the adapter to a ListView
-                winnersList.setAdapter(adapter);
+                mWinnersList.setAdapter(mWinnerAdapter);
             }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Log.e("Hall Of Fame",dataSnapshot.getValue(Winners.class).toString());
-                Winners winner = dataSnapshot.getValue(Winners.class);
-                if(winner != null)
-                    eventWinners.add(winner);
-                if(eventWinners!=null && getContext() != null)
-                    adapter = new WinnerAdapter(getContext(),eventWinners);
-                // Attach the adapter to a ListView
-                winnersList.setAdapter(adapter);
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                Log.e("Hall Of Fame",dataSnapshot.getValue(Winners.class).toString());
-                Winners winner = dataSnapshot.getValue(Winners.class);
-                if(winner != null)
-                    eventWinners.add(winner);
-                if(eventWinners!=null && getContext() != null)
-                    adapter = new WinnerAdapter(getContext(),eventWinners);
-                // Attach the adapter to a ListView
-                winnersList.setAdapter(adapter);
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Log.e("Hall Of Fame",dataSnapshot.getValue(Winners.class).toString());
-                Winners winner = dataSnapshot.getValue(Winners.class);
-                if(winner != null)
-                    eventWinners.add(winner);
-                if(eventWinners!=null && getContext() != null)
-                    adapter = new WinnerAdapter(getContext(),eventWinners);
-                // Attach the adapter to a ListView
-                winnersList.setAdapter(adapter);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        };
-
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-
-        if(auth!=null){
-            DatabaseReference mWinnersDatabase = mDatabase.child("users").child(auth.getUid()).child("winners");
-            mWinnersDatabase.addChildEventListener(childEventListener);
-        }
+        });
 
         return rootView;
     }
 
 }
 
-
-class Winners{
-
-    private String image;
-    private String name;
-    private String eventName;
-
-    Winners(){
-
-    }
-
-    Winners(String image,String name,String event){
-        this.image = image;
-        this.name = name;
-        this.eventName = event;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getEventName() {
-        return eventName;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setEventName(String eventName) {
-        this.eventName = eventName;
-    }
-
-
-}
-
-class WinnerAdapter extends ArrayAdapter<Winners>{
-
-    public WinnerAdapter(Context context, ArrayList<Winners> winners){
-        super(context,0,winners);
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-
-        // Check if an existing view is being reused, otherwise inflate the view
-        if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.winners_list_item, parent, false);
-        }
-
-        // Get the data item for this position
-        Winners winner = getItem(position);
-
-        ImageView image = convertView.findViewById(R.id.winnerPic);
-        TextView name = convertView.findViewById(R.id.winnerName);
-        TextView event = convertView.findViewById(R.id.winningEvent);
-
-        Glide.with(image).load(winner.getImage()).into(image);
-        name.setText(winner.getName());
-        event.setText(winner.getEventName());
-
-        // Return the completed view to render on screen
-        return convertView;
-    }
-
-
-}

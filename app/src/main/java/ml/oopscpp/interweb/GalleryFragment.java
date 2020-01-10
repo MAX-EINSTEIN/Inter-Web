@@ -53,7 +53,7 @@ public class GalleryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Set Toolbar's title
-        getActivity().setTitle("Gallery");
+        Objects.requireNonNull(getActivity()).setTitle("Gallery");
 
         MainActivity mainActivity = (MainActivity) getActivity();
         mainActivity.fab.setVisibility(View.VISIBLE);
@@ -101,7 +101,7 @@ public class GalleryFragment extends Fragment {
             }
         };
 
-        if(auth != null){
+        if(auth.getUid() != null){
             DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
             DatabaseReference mImagesDatabase = mDatabase.child("users").child(auth.getUid()).child("images");
             mImagesDatabase.addChildEventListener(childEventListener);
@@ -115,6 +115,7 @@ public class GalleryFragment extends Fragment {
         super.onResume();
 
         MainActivity mainActivity = (MainActivity) getActivity();
+        if(mainActivity != null)
         mainActivity.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -189,7 +190,7 @@ public class GalleryFragment extends Fragment {
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
 
-        if(auth != null){
+        if(auth.getUid() != null){
             // Writing Image's Url to Firebase Realtime Database
             DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
             DatabaseReference mImagesDatabase = mDatabase.child("users").child(auth.getUid()).child("images");

@@ -15,7 +15,7 @@ import com.google.firebase.database.FirebaseDatabase;
 public class AddWinner extends AppCompatActivity {
 
     private boolean winnerChosen = false;
-    private Winners winner;
+    private Winner winner;
 
     private static int SELECT_PARTICIPANT = 55555;
 
@@ -24,7 +24,7 @@ public class AddWinner extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_winner);
 
-        winner = new Winners();
+        winner = new Winner();
 
         Button chooseWinnerButton = findViewById(R.id.choose_winner_button);
         Button announceWinnerButton = findViewById(R.id.announce_winner_button);
@@ -69,7 +69,7 @@ public class AddWinner extends AppCompatActivity {
         }
     }
 
-    private void addToFirebaseRealtimeDatabase(Winners winner){
+    private void addToFirebaseRealtimeDatabase(Winner winner){
         // Writing to Firebase Realtime Database
         FirebaseAuth auth = FirebaseAuth.getInstance();
 
