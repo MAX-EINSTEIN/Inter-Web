@@ -34,4 +34,7 @@
     <string name="event_image_content_description">Event Image</string>
 
     <string name="google_maps_API_KEY">AIzaSyDNE1gQmXqkidOFwWU1WglqJMvDYvDmGZU</string>
+    <string name="upcoming_events">Upcoming Events</string>
+    <string name="past_events">Past Events</string>
+    <string name="favorite_events">Favorite Events</string>
 </resources>

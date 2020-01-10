@@ -6,14 +6,55 @@
     android:layout_height="match_parent"
     tools:context=".EventFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/eventList"
+    <TextView
+        android:id="@+id/upcomingEventsHeading"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="none"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/small_padding"
+        android:text="@string/upcoming_events"
+        android:textColor="?android:textColorSecondary"
+        android:textStyle="bold|italic"
+        android:textSize="@dimen/medium_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/eventList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/upcomingEventsHeading" />
+
+    <TextView
+        android:id="@+id/favoriteEventsHeading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/small_padding"
+        android:text="@string/favorite_events"
+        android:textColor="?android:textColorSecondary"
+        android:textStyle="bold|italic"
+        android:textSize="@dimen/medium_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/eventList" />
+
+
+    <TextView
+        android:id="@+id/pastEventsHeading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/small_padding"
+        android:text="@string/past_events"
+        android:textColor="?android:textColorSecondary"
+        android:textStyle="bold|italic"
+        android:textSize="@dimen/medium_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/favoriteEventsHeading" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

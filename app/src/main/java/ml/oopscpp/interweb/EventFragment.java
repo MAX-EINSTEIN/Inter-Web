@@ -8,23 +8,18 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.google.firebase.database.DataSnapshot;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.Objects;
-import java.util.StringTokenizer;
 
 
 public class EventFragment extends Fragment
@@ -59,11 +54,8 @@ public class EventFragment extends Fragment
 
         mEventsList = rootView.findViewById(R.id.eventList);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         mEventsList.setLayoutManager(layoutManager);
-        mEventsList.addItemDecoration(
-                new DividerItemDecoration(Objects.requireNonNull(getContext()),
-                DividerItemDecoration.VERTICAL));
 
         mEvents = new ArrayList<>();
 
@@ -90,28 +82,9 @@ public class EventFragment extends Fragment
                     }
 
                     if(mEvents != null){
-//                        Collections.sort(mEvents, new Comparator<Event>() {
-//                            @Override
-//                            public int compare(Event lhs, Event rhs) {
-//                                int compareCode = 0;
-//                                String sDate1 = lhs.getEventDate();
-//                                String sDate2 = rhs.getEventDate();
-//                                @SuppressLint("SimpleDateFormat")
-//                                SimpleDateFormat formatter = new SimpleDateFormat("dd MMM, yyyy");
-//                                try {
-//                                    Date date1 = formatter.parse(sDate1);
-//                                    Date date2 = formatter.parse(sDate2);
-//                                    compareCode = date1.compareTo(date2);
-//                                }catch (Exception e){
-//                                    Log.e(LOG_TAG, "Error parsing dates");
-//                                }
-//
-//                                return compareCode;
-//                            }
-//                        });
+                        sortEventDataAndKeys();
                         mEventAdapter = new EventAdapter(mEvents, self);
                     }
-
 
                     mEventsList.setAdapter(mEventAdapter);
                 }
@@ -144,5 +117,34 @@ public class EventFragment extends Fragment
         Event currentEvent = mEvents.get(clickedItemIndex);
         detailEventLauncher.putExtra("event",currentEvent);
         startActivity(detailEventLauncher);
+    }
+
+    private int compareEventsByDate(Event lhs, Event rhs){
+        int compareCode = 0;
+        String sDate1 = lhs.getEventDate();
+        String sDate2 = rhs.getEventDate();
+        @SuppressLint("SimpleDateFormat")
+        SimpleDateFormat formatter = new SimpleDateFormat("dd MMM, yyyy");
+        try {
+            Date date1 = formatter.parse(sDate1);
+            Date date2 = formatter.parse(sDate2);
+            if(date1!=null && date2!=null)
+                compareCode = date1.compareTo(date2);
+        }catch (Exception e){
+            Log.e(LOG_TAG, "Error parsing dates");
+        }
+
+        return compareCode;
+    }
+
+    private void sortEventDataAndKeys(){
+        for(int i=0; i<mEvents.size()-1; i++){
+            for(int j=0; j<mEvents.size()-i-1;j++){
+                if(compareEventsByDate(mEvents.get(j), mEvents.get(j+1))<0){
+                    Collections.swap(mEvents, j, j+1);
+                    Collections.swap(mKeys, j, j+1);
+                }
+            }
+        }
     }
 }

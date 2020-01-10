@@ -2,16 +2,18 @@
 
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/eventCard"
-    android:layout_width="match_parent"
+    android:layout_width="240dp"
     android:layout_height="wrap_content"
     android:background="@drawable/event_list_background"
-    android:layout_marginBottom="@dimen/small_margin">
+    android:elevation="4dp"
+    android:layout_margin="12dp">
 
     <ImageView
         android:id="@+id/eventImage"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="160dp"
         android:scaleType="centerCrop"
         android:adjustViewBounds="true"
         android:contentDescription="@string/event_image_content_description" />
@@ -19,25 +21,34 @@
     <TextView
         android:id="@+id/eventName"
         style="@style/TextAppearance.AppCompat.Subhead"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/eventImage"
         android:padding="4dp"
+        android:lines="1"
         android:paddingStart="@dimen/small_padding"
         android:paddingEnd="@dimen/small_padding"
-        android:textSize="@dimen/large_text"
-        android:textStyle="bold" />
+        android:textSize="@dimen/medium_text"
+        android:textStyle="bold"/>
+
+    <ImageView
+        android:id="@+id/dateIcon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        app:srcCompat="@drawable/ic_datetime_icon"
+        android:padding="2dp"
+        android:layout_below="@id/eventName"
+        android:layout_alignParentStart="true"
+        android:contentDescription="@string/action_about"/>
 
     <TextView
         android:id="@+id/eventDate"
         style="@style/TextAppearance.AppCompat.Subhead"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
         android:layout_below="@id/eventName"
-        android:padding="2dp"
-        android:paddingStart="@dimen/small_padding"
-        android:paddingEnd="@dimen/small_padding"
+        android:layout_marginStart="0dp"
+        android:layout_toEndOf="@+id/dateIcon"
         android:textColor="?android:textColorSecondary"
         android:textStyle="italic" />
 
@@ -48,10 +59,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/eventName"
         android:layout_alignParentEnd="true"
-        android:padding="2dp"
         android:paddingStart="@dimen/small_padding"
         android:paddingEnd="@dimen/small_padding"
         android:textColor="?android:textColorSecondary"
-        android:textStyle="bold"/>
+        android:textStyle="bold" />
 
 </RelativeLayout>
